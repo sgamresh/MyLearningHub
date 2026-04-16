@@ -1,0 +1,185 @@
+{
+    "categories": [
+        {
+            "name": "Java",
+            "subcategories": [
+                {
+                    "name": "Strings",
+                    "questions": [
+                        {
+                            "type": "program",
+                            "question": "Duplicate Words In String",
+                            "code": "public static void findDuplicateWords() {\n\n\t\tString inputString = \"Hey java is is outdated now because java is outdated\";\n\t\t// Split\n\t\tString words[] = inputString.split(\" \");\n\t\t// System.out.println(words);\n\n\t\t// Create a Hash Map\n\t\tMap<String, Integer> wordCount = new HashMap<String, Integer>();\n\n\t\t// To check each word in given array\n\t\tfor (String word : words) {\n\t\t\t// If word is present in words Array,\n\t\t\tif (wordCount.containsKey(word)) {\n\t\t\t\twordCount.put(word.toLowerCase(), wordCount.get(word) + 1);\n\t\t\t} else {\n\t\t\t\twordCount.put(word, 1);\n\t\t\t}\n\n\t\t}\n\n\t\t// For extracting Hash map\n\t\tSet<String> wordsInString = wordCount.keySet();\n\n\t\t// For loop through all the words in wordCount\n\t\tfor (String word : wordsInString) {\n\t\t\tif (wordCount.get(word) > 1) {\n\t\t\t\tSystem.out.println(word + \" : \" + wordCount.get(word));\n\t\t\t} else {\n\n\t\t\t}\n\t\t}\n\n\t}",
+                            "output": "Add Later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "printDuplicateOccuranceOfStringsCount",
+                            "code": "public static void printDuplicateOccuranceOfStringsCount() {\n\t\t\n\t\tString str = \"I am am learning Java Java\";\n\t\tMap <String, Integer> map = new HashMap<String, Integer>();\n\t\tString newstr[] = str.split(\" \");\n\t\tSystem.out.println(newstr);\n\t\t\n\t\tfor(String s: newstr) {\n\t\t\tSystem.out.println(s);\n\t\t\tif(map.get(s)!=null) {\n\t\t\t\tmap.put(s, map.get(s)+1);\n\t\t\t}\n\t\t\telse {\n\t\t\t\tmap.put(s, 1);\t\n\t\t\t}\n\t\t}\n\t\t\n\t\tIterator<String> tempString = map.keySet().iterator();\n\t\twhile(tempString.hasNext()) {\n\t\t\t\n\t\t\tString temp = tempString.next();\n\t\t\tif(map.get(temp)>1) {\n\t\t\t\tSystem.out.println(\"The Word \"+temp+\" appeared \"+map.get(temp)+\" No of Times\");\n\t\t\t}\n\t\t}\n\t\tSystem.out.println(map);\n\t}",
+                            "output": "Later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "findDuplicateCharacters",
+                            "code": "public static void findDuplicateCharacters() {\n\t\tString str = \"I am am learning Java Java\";\n\t\tHashMap <Character, Integer> hm = new HashMap<Character, Integer>();\n\t\tfor(int i=0; i<str.length();i++) {\n\t\t\tchar c = str.charAt(i);\n\t\t\tif(hm.get(c) !=null) {\n\t\t\t\thm.put(c, hm.get(c)+1);\n\t\t\t}\n\t\t\telse {\n\t\t\t\thm.put(c, 1);\n\t\t\t}\n\t\t}\n\t\tSystem.out.println(hm);\n\t\tIterator<Character> iter = hm.keySet().iterator();\n\t\twhile(iter.hasNext()) {\n\t\t\tCharacter temp = iter.next();\n\t\t\tif(hm.get(temp)>1) {\n\t\t\t\t\n\t\t\t\tSystem.out.println(\"The Character \"+temp+\" appeared \"+hm.get(temp)+\" No of Times\");\n\n\t\t\t}\n\t\t\t\n\t\t}\n\t\t\n\t\n\t}",
+                            "output": "Later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "convertToCharArray",
+                            "code": "public static void convertToCharArray() {\n\t\tString str = \"I am am learning Java Java\";\n\t\tString newString=\"\";\n\t\tchar[] strc =str.toCharArray(); \n\t\tint size = strc.length;\n\t\tfor(int i=size-1;i>=0;i--) {\n\t\t\tnewString=newString+strc[i];\n\t\t}\n\t\tSystem.out.println(\"New String: \"+newString);\n\t\n\t}",
+                            "output": "Later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "ReverseAWord.java",
+                            "code": "package javacode.strings;\n\npublic class ReverseAWord {\n\npublic static void main(String[] args) {\n        \n        String str=\"This is India\";\n        String reverseredStr= reverse(str);\n        System.out.println(reverseredStr);\n        \n        \n    }\n    \n    public static String reverse(String originalStr){\n        char strChar[] = originalStr.toCharArray();\n        int len = originalStr.length();\n        int start= 0;\n        int end = len-1;\n        while(start<end){\n            char temp = strChar[start];\n            strChar[start]=strChar[end];\n            strChar[end]=temp;\n            start++;\n            end--;\n            \n        }\n        \n        return new String(strChar);\n        \n    }\n}",
+                            "output": "Later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "ReverseWordsInAString.java",
+                            "code": "package javacode.strings;\n\npublic class ReverseWordsInAString {\n\n\t public static void main(String[] args) {\n\t        \n\t        String str=\"This is new India\";\n\t        String ReveresedString=reverseSentence(str);\n\t        System.out.println(ReveresedString);\n\t        \n\t    }\n\t    \n\t    public static String reverseSentence(String originalStr){\n\t       \n\t       String[] strArray = originalStr.split(\" \");\n\t       \n\t       StringBuilder newString = new StringBuilder();\n\t       int len = strArray.length;\n\t       for(int i=len-1; i>=0; i--){\n\t           \n\t          newString=newString.append( strArray[i]);\n\t          \n\t          if(i>0){\n\t              newString=newString.append(\" \");\n\t          }\n\t         \n\t       }\n\t        \n\t                    return newString.toString();\n\n\t        }\n\t        \n\n}",
+                            "output": "Later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "StringBuffer.java",
+                            "code": "package javacode.strings;\n\npublic class StringBuffer {\n\n\tpublic static void main(String[] args) {\n      \n//\t\tStringBuffer str = new StringBuffer(\"Amresh\");\n\t\t\n\t}\n\n}",
+                            "output": "Later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "StringBuilderExamples.java",
+                            "code": "package javacode.strings;\n\npublic class StringBuilderExamples {\n\n\tpublic static void main(String[] args) {\n\t\t\n\t\tStringBuilder str = new StringBuilder (\"Amresh\");\n\t\tstr.append(\"Pradhan\");\n\t\tSystem.out.println(str);\n\t\t\n\t\t  StringBuilder builder=new StringBuilder(\"hello\");  \n\t      builder.append(\"java\");  \n\t      System.out.println(builder);  \n\t}\n\n}",
+                            "output": "Later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "StringsExamples.java",
+                            "code": "package javacode.strings;\n\nimport org.testng.annotations.Test;\n\npublic class StringsExamples {\n\n\t@Test(enabled = false)\n\tpublic static void Concat() {\n\t\tString str = \"Amresh\";\n\t\tstr = str.concat(\"Pradhan\");\n\t\tSystem.out.println(str);\n\t}\n\n\t@Test(enabled = false)\n\tpublic static void Anagram() {\n\t\tString str1 = \"ampion\";\n\t\tString str2 = \"poniam\";\n\t\tboolean isAnagram = false;\n\t\t// 1. length must be same\n\t\tboolean visited[] = new boolean[str2.length()];\n\t\tif (str1.length() == str2.length()) {\n\t\t\tfor (int i = 0; i < str1.length(); i++) {\n\t\t\t\tchar c = str1.charAt(i);\n\t\t\t\tisAnagram = false;\n\t\t\t\tfor (int j = 0; j < str2.length(); j++) {\n\t\t\t\t\tif ((str2.charAt(j) == c) && !visited[j]) {\n\t\t\t\t\t\tvisited[j] = true;\n\t\t\t\t\t\tisAnagram = true;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tif (!isAnagram) {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tif (isAnagram) {\n\t\t\tSystem.out.println(\"This is a Anagram\");\n\t\t} else {\n\t\t\tSystem.out.println(\"This is not an Anagram\");\n\t\t}\n\t}\n\n\t@Test(enabled = false)\n\tpublic static void AnagrambyChars() {\n\t\tString str1 = \"ampion\";\n\t\tString str2 = \"ampion\";\n\t\tboolean isAnagram = true;\n\t\tint al[] = new int[256];\n\t\tint bl[] = new int[256];\n\t\t// 1. length must be same\n\t\tfor (char c : str1.toCharArray()) {\n\t\t\tint index = (int) c;\n\t\t\tal[index]++;\n\t\t}\n\t\tfor (char c : str2.toCharArray()) {\n\t\t\tint index = (int) c;\n\t\t\tbl[index]++;\n\t\t}\n\n\t\tfor (int i = 0; i < 256; i++) {\n\t\t\tif (al[i] != bl[i]) {\n\t\t\t\tisAnagram = false;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\n\t\tif (isAnagram) {\n\t\t\tSystem.out.println(\"This is a Anagram\");\n\t\t} else {\n\t\t\tSystem.out.println(\"This is not an Anagram\");\n\t\t}\n\n\t}\n\n\t@Test(enabled = false)\n\tpublic static void ReverseString() {\n\n\t\tString str = \"Hello India\";\n\t\tint len = str.length();\n\t\tchar[] c = str.toCharArray();\n\t\tchar[] newc = new char[len];\n\t\tint count = 0;\n\t\tfor (int i = len - 1; i >= 0; i--) {\n\t\t\tnewc[count] = c[i];\n\t\t\tcount++;\n\t\t}\n\t\tfor (int j = 0; j < len; j++) {\n\t\t\tSystem.out.println(newc[j]);\n\t\t}\n\n\t}\n\n\t@Test(enabled = true)\n\tpublic static void RemoveSpacesAndSpecialCharsFromString() {\n\t\tString str = \"vsdvsvsd%%%%v  dsvds#VSvs$dsvsd@\";\n\t\tString newString = str.replaceAll(\"[^a-zA-Z0-9]\", \"\");\n\t\tSystem.out.println(newString);\n\n\t\tString str1 = \"vsdv sgd vsd%%%%v  dsvd s#VSvs $dsvsd@ \";\n\t\tString str2 = str1.replaceAll(\"\\\\s\", \"\");\n\t\tSystem.out.println(str2);\n\n\t}\n}",
+                            "output": "Later"
+                        }
+                    ]
+                },
+                {
+                    "name": "Exception Handling",
+                    "questions": []
+                },
+                {
+                    "name": "Arrays",
+                    "questions": [
+                        {
+                            "type": "program",
+                            "question": "ArrayExamples.java",
+                            "code": "package javacode.arrays;\n\nimport org.testng.annotations.Test;\n\npublic class ArrayExamples {\n\n\t@Test(enabled=false)\n\tpublic static void Arrays() {\n\n\t\tint a[] = new int[4];\n\t\ta[0] = 100;\n\t\ta[1] = 110;\n\t\ta[2] = 130;\n\t\ta[3] = 150;\n\t\tSystem.out.println(\"Integer Value: \" + a[0]);\n\t\tSystem.out.println(\"Integer Value: \" + a[1]);\n\t\tSystem.out.println(\"Integer Value: \" + a[2]);\n\t\tSystem.out.println(\"Integer Value: \" + a[3]);\n\n\t\tSystem.out.println();\n\n\t\tObject values1[] = new Object[2];\n\t\tvalues1[0] = \"Amresh\";\n\t\tvalues1[1] = 69;\n\t\tSystem.out.println(\"Object Array Value: \" + values1[0]);\n\t\tSystem.out.println(\"Object Array Value: \" + values1[1]);\n\n\t}\n\n\t@Test(enabled=true)\n\tpublic static void SortingArrays() {\n\t\tint array[] = {1,3,2,4,5,11,8};\n\t\tint temp;\n\t\tint arrlength=array.length;\n\t\tfor(int i=0;i<arrlength;i++) {\n\t\t\tfor(int j=i+1;j<arrlength;j++) {\n\t\t\t\tif(array[i]>array[j]) {\n\t\t\t\t\ttemp = array[i];\n\t\t\t\t\tarray[i]=array[j];\n\t\t\t\t\tarray[j]=temp;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tfor(int k=0;k<arrlength;k++) {\n\t\t\tSystem.out.println(\"Sorted array: \"+ array[k]);\n\t\t}\n\t}\n\n\t\n\t\n\t\n\t\n\t\n\t\n}",
+                            "output": "later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "SingleDimentionalArrayExample.java",
+                            "code": "package javacode.arrays;\n\nimport java.util.Scanner;\n\npublic class SingleDimentionalArrayExample {\n\n\tpublic static void main(String[] args) {\n\t\tint arr[] = new int[4];\n\t\tScanner scan = new Scanner(System.in);\n\t\tfor (int i = 0; i < 4; i++) {\n\t\t\tSystem.out.println(\"Enter Number-\" + i + \":\");\n\t\t\tarr[i] = scan.nextInt();\n\t\t}\n\t\tSystem.out.println(\"Printing Single Dimentional Array\");\n\t\tSystem.out.println(\"*********************************\");\n\t\tfor (int i = 0; i < 4; i++) {\n\n\t\t\tSystem.out.println(\"arr[\" + i + \"] = \" + arr[i]);\n\t\t}\n\t\tscan.close();\n\t}\n}",
+                            "output": "later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "ThreeDimentionalArray.java",
+                            "code": "package javacode.arrays;\n\nimport java.util.Scanner;\n\npublic class ThreeDimentionalArray {\n\n\tpublic static void main(String[] args) {\n\n\t\t// THREE DIMENTIONAL ARRAY\n\n\t\tint threedim[][][] = new int[2][2][2];\n\t\tScanner scan = new Scanner(System.in);\n\n\t\tfor (int i = 0; i < 2; i++) {\n\t\t\tfor (int j = 0; j < 2; j++) {\n\t\t\t\tfor (int k = 0; k < 2; k++) {\n\n\t\t\t\t\tSystem.out.println(\"Enter Number - \" + i + \",\" + j + \",\" + k + \":\");\n\t\t\t\t\tthreedim[i][j][k] = scan.nextInt();\n\n\t\t\t\t}\n\n\t\t\t}\n\t\t}\n\n\t\tSystem.out.println(\"Printing Three Dimentional Array\");\n\t\tSystem.out.println(\"*********************************\");\n\n\t\tfor (int i = 0; i < 2; i++) {\n\t\t\tfor (int j = 0; j < 2; j++) {\n\t\t\t\tfor (int k = 0; k < 2; k++) {\n\n\t\t\t\t\tSystem.out.println(\"arr[\" + i + \"][\" + j + \"]\" + \"[\" + j + \"]= \" + threedim[i][j][k]);\n\n\t\t\t\t}\n\n\t\t\t}\n\t\t}\n\n\t\tscan.close();\n\n\t}\n\n}",
+                            "output": "later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "TwoDimentionalArraysExamples.java",
+                            "code": "package javacode.arrays;\n\nimport java.util.Scanner;\n\npublic class TwoDimentionalArraysExamples {\n\n\tpublic static void main(String[] args) {\n\n\t\t// TWO DIMENTIONAL ARRAY\n\n\t\tint multi[][] = new int[2][2];\n\t\tScanner scan = new Scanner(System.in);\n\n\t\tfor (int i = 0; i < 2; i++) {\n\t\t\tfor (int j = 0; j < 2; j++) {\n\t\t\t\tSystem.out.println(\"Enter Number - \" + i + \",\" + j + \":\");\n\t\t\t\tmulti[i][j] = scan.nextInt();\n\t\t\t}\n\t\t}\n\n\t\tSystem.out.println(\"Printing Double Dimentional Array\");\n\t\tSystem.out.println(\"*********************************\");\n\t\tfor (int i = 0; i < 2; i++) {\n\t\t\tfor (int j = 0; j < 2; j++) {\n\n\t\t\t\tSystem.out.println(\"arr[\" + i + \"]\" + \"[\" + j + \"]\" + \" = \" + multi[i][j]);\n\t\t\t}\n\t\t}\n\t\tscan.close();\n\n\t}\n\n}",
+                            "output": "later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "Arraysmallest",
+                            "code": "public void Arraysmallest() {\n\t\tint [] arr = {9,5,6,7,8,4,10,6,2};\n\t\tint min = 0;\n        if(arr[0]<=arr[1]) {\n        \tmin = arr[0];\n        }else {\n        \tmin = arr[1];\n        }\n\t\tfor(int i=1; i<arr.length; i++) {\n\t\t\tif(min <= arr[i]) {\n\t\t\t\tmin = min;\n\t\t\t} else {\n\t\t\t\tmin = arr[i];\n\t\t\t}\n\t\t   \n\t\t}\n\t\tSystem.out.println(\"--- Smallest number in array ---\");\n\t\tSystem.out.println(min);\n\n\n\t}",
+                            "output": "later"
+                        }
+                    ]
+                },
+                {
+                    "name": "Collections",
+                    "questions": [
+                        {
+                            "type": "program",
+                            "question": "CollectionApiExamples.java",
+                            "code": "package javacode.collectionsapi;\n\nimport java.util.ArrayList;\nimport java.util.Collection;\nimport java.util.Iterator;\n\npublic class CollectionApiExamples {\n\n\tpublic static void main(String[] args) {\n\t\t\n\t\tCollection values = new ArrayList();\n\t\tvalues.add(3); values.add(\"Amresh\"); values.add(3.6f);\n\n\t\t//Using Iterator \n\t\tIterator i =  values.iterator();\n\t\t\n\t\tSystem.out.println(\"Using Normal SYSOUT\");\n\t\t//System.out.println(i.next()); System.out.println(i.next()); System.out.println(i.next());\t\n\t\t\n\t\tSystem.out.println(\"Using Normal for loop\");\n\t\tfor(int x =0; x<3; x++) {\n\t\t\tSystem.out.println(i.next());\n\t\t}\n\t\t\n\t\tSystem.out.println(\"Using Iterator\");\n\t\twhile(i.hasNext()){\n\t\t\tSystem.out.println(i.next());\n\t\t}\n\t\t\n\t\tSystem.out.println(\"Using Enhanced For loop\");\n\t\tfor(Object j:values) {\n\t\t\tSystem.out.println(j);\n\t\t}\n\t\t\n\t\t//Generics Integer\n\t\tCollection<Integer> values1 = new ArrayList();\n\t\tvalues1.add(3); values1.add(5); values1.add(3);\n\n\t\tSystem.out.println(\"Using Integer Enhanced For loop\");\n\t\tfor(Integer j:values1) {\n\t\t\tSystem.out.println(j);\n\t\t}\n\t\t\n\t}\n\n}",
+                            "output": "later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "HashSetExamples.java",
+                            "code": "package javacode.collectionsapi;\n\nimport java.util.HashSet;\nimport java.util.Iterator;\nimport java.util.Set;\n\npublic class HashSetExamples {\n\n\tpublic static void main(String[] args) {\n\t\t\n\t\tSet<Integer> hs = new HashSet<Integer>();\n\t\ths.add(23);\n\t\ths.add(45);\n\t\t//System.out.println(hs.contains(23));\n\t\n\t\t\n\t\t\n\t\tIterator<Integer> it = hs.iterator();\n\t\t\n\t\twhile(it.hasNext())\n\t\t{\n\t\t\tint x = it.next();\n\t\t\tSystem.out.println(x);\n\t\t}\n\n\t}\n\n}",
+                            "output": "later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "ListExamples.java",
+                            "code": "package javacode.collectionsapi;\n\nimport java.util.ArrayList;\nimport java.util.LinkedList;\nimport java.util.List;\n\nimport org.testng.annotations.Test;\n\npublic class ListExamples {\n\n\t@Test\n\tpublic void ListExample1() {\n//\t\tDuplicate elements are allowed in a List\n\t\t\n//\t\tif you know the size is fixed, then go for Array. Else go for Arraylist.\n//\t\t.add(element);\n//\t\t.size();\n//\t\t.remove(index);\n//\t\t.iterator();\n//\t\t.get(index);\n//\t\t.set(index, value);\n//\t\t.allAll(Collection);\n//\t\t.removeAll();\n//\t\t.clear()\n//\t\t.lastIndexOf();\n//\t\t.clone();\n//\t\t.contains();\n//\t\t.isEmpty();\n//\t\t.trimToSize(;)\n//\t\t.toArray{};\n\t\t\n//\t\tSyntax\n//\t\tArrayList <Type> arrayList = new ArrayList<>();\n\t\t\n\t\tArrayList <String> arrayList = new ArrayList<String>();\n\t\tarrayList.add(\"Amresh\");\n\t\tSystem.out.println(arrayList);\n\t\t\n\t\t\n\t\tList value = new ArrayList();\n\t\tvalue.add(7);\n\t\tvalue.add(\"Amresh\");\n\t\tSystem.out.println(value);\n\t\t\n\t\tList<Integer> values = new ArrayList<Integer>();\n\t\tvalues.add(23);\n\t\tSystem.out.println(values);\n\t\t\n\t\tList<Integer> valuesl = new LinkedList<Integer>();\n\t\tvaluesl.add(23);\n\t\tSystem.out.println(valuesl);\n\t\t\n//\t\tArrayList is implemented as a dynamic Array. and it is slow.\n//\t\tLinked List is implemented as a double Linked List and it is Fast.\n\n\t\t\n\n\t}\n\n}",
+                            "output": "later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "MapExamples.java",
+                            "code": "package javacode.collectionsapi;\n\nimport java.util.HashMap;\nimport java.util.LinkedHashMap;\nimport java.util.Map;\n\npublic class MapExamples {\n\n\tpublic static void main(String[] args) {\n\n\t\t//Key Value relationship\n\t\t//Map is an Interface.\n//\t\tMap hm = new HashMap();\n//\t\tMap ht = new HashTable();\n//\t\tMap thm = new TreeHashMap();\n//\t\tMap lhm = new LinkedHashMap();\n\t\t\n\t\t\n\t\tHashMap<Integer , Integer> hmi = new HashMap<Integer , Integer>();\n\t\thmi.put(23, 32);\n\t\tSystem.out.println(hmi.get(23));\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n//\t\tm.put(\"Amresh\", 1234);\n//\t\tSystem.out.println(\"\"+m.get(\"Amresh\"));\n//\t\tSystem.out.println(m);\n//\t\t\n\t\t\n\t\t\n\t\n\t}\n\n}",
+                            "output": "later"
+                        },
+                        {
+                            "type": "program",
+                            "question": "SetExamples.java",
+                            "code": "package javacode.collectionsapi;\n\npublic class SetExamples {\n\n\tpublic static void main(String[] args) {\n\t\t//Unique Elements\n\t\t//Random sequence\n\n\t}\n\n}",
+                            "output": "later"
+                        }
+                    ]
+                },
+                {
+                    "name": "Filehandling",
+                    "questions": [
+                        {
+                            "type": "program",
+                            "question": "ReadTextFileExample.java",
+                            "code": "package javacode.filehandling;\n\nimport java.io.File;\nimport java.io.FileInputStream;\nimport java.io.FileReader;\nimport java.io.IOException;\nimport java.util.Iterator;\nimport org.apache.poi.ss.usermodel.Cell;\nimport org.apache.poi.ss.usermodel.Row;\nimport org.apache.poi.xssf.usermodel.XSSFSheet;\nimport org.apache.poi.xssf.usermodel.XSSFWorkbook;\n\npublic class ReadTextFileExample {\n\n\tpublic static void main(String[] args) throws Exception {\n\t\tReadTextFileExample obj = new ReadTextFileExample();\n\n\t\t// File txtfile = new File(\"./Files/SampleTextFile_10kb.txt\");\n\t\tFile xlsxfile = new File(\"./Files/BJS_Resume_Database.xlsx\");\n\t\t// File docxfile = new File(\"./Files/SampleTextFile_10kb.txt\");\n\n\t\t// obj.readtxtFile(txtfile);\n\t\tobj.readxlsxFile(xlsxfile);\n\t\t// obj.readdocxFile(docxfile);\n\n\t}\n\n\tpublic void readtxtFile(File file) throws IOException {\n\n\t\tFileReader fr = new FileReader(file);\n\t\tint i = 0;\n\t\twhile ((i = fr.read()) != -1) {\n\t\t\tSystem.out.print((char) i);\n\n\t\t}\n\t\tfr.close();\n\t}\n\n\tpublic void readxlsxFile(File xlsxfile) throws Exception {\n\n\t\tFileInputStream fis = new FileInputStream(xlsxfile);\n\n\t\t// Finds the workbook instance for XLSX file\n\t\tXSSFWorkbook myWorkBook = new XSSFWorkbook(fis);\n\n\t\t// Return first sheet from the XLSX workbook\n\t\tXSSFSheet mySheet = myWorkBook.getSheetAt(0);\n\n\t\t// Get iterator to all the rows in current sheet\n\t\tIterator<Row> rowIterator = mySheet.iterator();\n\n\t\t// Traversing over each row of XLSX file\n\t\twhile (rowIterator.hasNext()) {\n\t\t\tRow row = rowIterator.next();\n\t\t\t// For each row, iterate through each columns\n\t\t\tIterator<Cell> cellIterator = row.cellIterator();\n\t\t\twhile (cellIterator.hasNext()) {\n\t\t\t\tCell cell = cellIterator.next();\n\n\t\t\t\tswitch (cell.getCellType()) {\n\t\t\t\tcase Cell.CELL_TYPE_STRING:\n\t\t\t\t\tSystem.out.print(cell.getStringCellValue() + \"\\t\");\n\t\t\t\t\tbreak;\n\t\t\t\tcase Cell.CELL_TYPE_NUMERIC:\n\t\t\t\t\tSystem.out.print(cell.getNumericCellValue() + \"\\t\");\n\t\t\t\t\tbreak;\n\t\t\t\tcase Cell.CELL_TYPE_BOOLEAN:\n\t\t\t\t\tSystem.out.print(cell.getBooleanCellValue() + \"\\t\");\n\t\t\t\t\tbreak;\n\t\t\t\tdefault:\n\t\t\t\t}\n\t\t\t}\n\t\t\tSystem.out.println(\"\");\n\t\t}\n\n\t}\n\n\tpublic void readdocxFile(File docxfile) {\n\n\t}\n\n}",
+                            "output": "later"
+                        }
+                    ]
+                },
+                {
+                    "name": "Inheritance",
+                    "questions": [
+                        {
+                            "type": "program",
+                            "question": "Main.java Parent.java",
+                            "code": "package javacode.inheritance;\n\nclass Base { \n    public void Print() { \n        System.out.println(\"Base\"); \n    }          } \n  \nclass Derived extends Base {     \n    public void Print() { \n        System.out.println(\"Derived\"); \n    } } \n  class Main{ \n    public static void DoPrint( Base o ) { \n        o.Print();    } \n    public static void main(String[] args) { \n        Base x = new Base(); \n        Base y = new Derived(); \n        Derived z = new Derived(); \n        DoPrint(x); \n        DoPrint(y); \n        DoPrint(z); \n    } }\n\n\n\npackage javacode.inheritance;\n\npublic class Parent {\n\n\tpublic static void main(String[] args) {\n\t\t// TODO Auto-generated method stub\n\n\t}\n\n}",
+                            "output": "later"
+                        }
+                    ]
+                },
+                {
+                    "name": "Overloading/ Overriding",
+                    "questions": []
+                },
+                {
+                    "name": "Polymorphism",
+                    "questions": []
+                }
+            ]
+        },
+        {
+            "name": "OOP",
+            "subcategories": [
+                {
+                    "name": "Classes and Objects",
+                    "questions": []
+                },
+                {
+                    "name": "Inheritance and Polymorphism",
+                    "questions": []
+                }
+            ]
+        }
+    ]
+}

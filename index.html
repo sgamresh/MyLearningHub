@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Hub</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="branding">
+      <h1>Learning Hub</h1>
+      <p>Theory + Coding + Output drills in one place</p>
+    </div>
+    <button id="theme-toggle" class="btn btn-secondary" aria-label="Toggle dark and light mode">Toggle Theme</button>
+  </header>
+  <section class="toolbar sticky">
+    <button id="expand-all" class="btn">Expand All</button>
+    <button id="collapse-all" class="btn">Collapse All</button>
+  </section>
+  <section class="meta-row">
+    <div id="stats">Loading questions...</div>
+  </section>
+  <main id="content" class="content"></main>
+  <section id="add-question-panel" class="add-question-panel hidden" aria-live="polite">
+    <h2>Add Question (localhost only)</h2>
+    <form id="add-question-form">
+      <label class="form-field">
+        <span>Category</span>
+        <select id="add-category" required aria-label="Select category"></select>
+      </label>
+      <label class="form-field">
+        <span>Subcategory</span>
+        <select id="add-subcategory" required aria-label="Select subcategory"></select>
+      </label>
+      <label class="form-field">
+        <span>Question Type</span>
+        <select id="add-type" required aria-label="Select question type">
+          <option value="theory">Theory</option>
+          <option value="program">Program</option>
+        </select>
+      </label>
+      <label class="form-field form-field-full">
+        <span>Question</span>
+        <input id="add-question-text" type="text" required placeholder="Write your question">
+      </label>
+      <label class="form-field form-field-full">
+        <span>Answer (Theory)</span>
+        <textarea id="add-answer" rows="3" placeholder="Write answer for theory question"></textarea>
+      </label>
+      <label class="form-field form-field-full">
+        <span>Code (Program)</span>
+        <textarea id="add-code" rows="5" placeholder="Paste Java code for program question"></textarea>
+      </label>
+      <label class="form-field form-field-full">
+        <span>Output (Program)</span>
+        <textarea id="add-output" rows="3" placeholder="Expected output"></textarea>
+      </label>
+      <button id="add-question-submit" type="submit" class="btn form-submit">Add Question</button>
+    </form>
+    <p id="add-question-status"></p>
+  </section>
+  <template id="empty-state-template">
+    <div class="empty-state"><h2>No questions available</h2><p>Add new questions from localhost or update the data file.</p></div>
+  </template>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

@@ -19,6 +19,8 @@ const addSubcategory = document.getElementById("add-subcategory");
 const addSubcategoryNew = document.getElementById("add-subcategory-new");
 const addType = document.getElementById("add-type");
 const addQuestionText = document.getElementById("add-question-text");
+const addAnswerRich = document.getElementById("add-answer-rich");
+const addAnswerEditor = document.getElementById("add-answer-editor");
 const addAnswer = document.getElementById("add-answer");
 const addCode = document.getElementById("add-code");
 const addOutput = document.getElementById("add-output");
@@ -32,9 +34,101 @@ function updateStats() {
   stats.textContent = `Total questions: ${total}`;
 }
 
-function reRender() {
-  renderApp(content, state.rawData, state);
-  updateStats();
+function sanitizeRichHtml(input = "") {
+  const template = document.createElement("template");
+  template.innerHTML = String(input || "");
+  const allowedTags = new Set(["B", "STRONG", "I", "EM", "U", "S", "BR", "P", "DIV", "SPAN", "UL", "OL", "LI", "CODE", "PRE", "BLOCKQUOTE", "A", "H1", "H2", "H3", "H4", "FONT"]);
+  const allowedStyles = new Set(["color", "background-color", "font-weight", "font-style", "text-decoration"]);
+
+  const cleanNode = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) return;
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      node.remove();
+      return;
+    }
+
+    const element = node;
+    const tag = element.tagName.toUpperCase();
+    if (!allowedTags.has(tag)) {
+      const parent = element.parentNode;
+      if (!parent) return;
+      while (element.firstChild) parent.insertBefore(element.firstChild, element);
+      parent.removeChild(element);
+      return;
+    }
+
+    const attrs = Array.from(element.attributes);
+    attrs.forEach((attr) => {
+      const name = attr.name.toLowerCase();
+      if (name === "href" && tag === "A") return;
+      if (name === "style") return;
+      if (name === "color" && tag === "FONT") return;
+      element.removeAttribute(attr.name);
+    });
+
+    if (tag === "A") {
+      const href = (element.getAttribute("href") || "").trim();
+      if (!/^https?:\/\//i.test(href)) element.removeAttribute("href");
+    }
+
+    if (tag === "FONT") {
+      const color = (element.getAttribute("color") || "").trim();
+      if (color) element.style.color = color;
+      element.removeAttribute("color");
+    }
+
+    const styleText = element.getAttribute("style") || "";
+    if (styleText) {
+      const probe = document.createElement("span");
+      probe.style.cssText = styleText;
+      const cleanStyleParts = [];
+      allowedStyles.forEach((prop) => {
+        const value = probe.style.getPropertyValue(prop);
+        if (value) cleanStyleParts.push(`${prop}:${value}`);
+      });
+      if (cleanStyleParts.length) {
+        element.setAttribute("style", cleanStyleParts.join(";"));
+      } else {
+        element.removeAttribute("style");
+      }
+    }
+
+    Array.from(element.childNodes).forEach(cleanNode);
+  };
+
+  Array.from(template.content.childNodes).forEach(cleanNode);
+  return template.innerHTML.trim();
+}
+
+function setEditorHtml(editorElement, html) {
+  editorElement.innerHTML = sanitizeRichHtml(html);
+}
+
+function syncEditorToHidden(editorElement, hiddenInput) {
+  hiddenInput.value = sanitizeRichHtml(editorElement.innerHTML);
+}
+
+function initializeAddAnswerEditor() {
+  if (!addAnswerEditor || addAnswerEditor.dataset.initialized === "true") return;
+  addAnswerEditor.dataset.initialized = "true";
+  setEditorHtml(addAnswerEditor, "");
+  syncEditorToHidden(addAnswerEditor, addAnswer);
+  addAnswerEditor.addEventListener("input", () => syncEditorToHidden(addAnswerEditor, addAnswer));
+}
+
+function initializeEditAnswerEditors() {
+  content.querySelectorAll(".edit-rich-editor").forEach((editorRoot) => {
+    if (editorRoot.dataset.initialized === "true") return;
+    const editorInput = editorRoot.querySelector(".edit-answer-editor");
+    const hiddenInput = editorRoot.querySelector(".edit-answer");
+    if (!editorInput || !hiddenInput) return;
+
+    const initialHtml = decodeURIComponent(editorInput.dataset.initialAnswer || "");
+    setEditorHtml(editorInput, initialHtml);
+    syncEditorToHidden(editorInput, hiddenInput);
+    editorInput.addEventListener("input", () => syncEditorToHidden(editorInput, hiddenInput));
+    editorRoot.dataset.initialized = "true";
+  });
 }
 
 function setAddQuestionStatus(message, type = "info") {
@@ -50,6 +144,27 @@ function setInputVisibility(input, visible) {
   if (!visible) input.value = "";
 }
 
+function setRichEditorEnabled(editorRoot, enabled) {
+  const editorInput = editorRoot?.querySelector(".rich-editor-input");
+  if (editorInput) editorInput.contentEditable = enabled ? "true" : "false";
+  editorRoot?.querySelectorAll("[data-editor-cmd]").forEach((control) => {
+    control.disabled = !enabled;
+  });
+}
+
+function runEditorCommand(control) {
+  const cmd = control.dataset.editorCmd;
+  if (!cmd) return false;
+  const editorRoot = control.closest(".rich-editor");
+  const editorInput = editorRoot?.querySelector(".rich-editor-input");
+  if (!editorInput || editorInput.contentEditable !== "true") return false;
+
+  editorInput.focus();
+  const value = control.value || null;
+  document.execCommand(cmd, false, value);
+  return true;
+}
+
 function appendSelectOption(selectElement, value, label) {
   const opt = document.createElement("option");
   opt.value = value;
@@ -63,6 +178,12 @@ function getSelectedCategoryName() {
 
 function getSelectedSubcategoryName() {
   return addSubcategory.value === NEW_OPTION_VALUE ? addSubcategoryNew.value.trim() : addSubcategory.value;
+}
+
+function reRender() {
+  renderApp(content, state.rawData, state);
+  initializeEditAnswerEditors();
+  updateStats();
 }
 
 function populateAddQuestionSelectors(data) {
@@ -117,6 +238,7 @@ function updateTypeFields() {
   addAnswer.disabled = !isTheory;
   addCode.disabled = isTheory;
   addOutput.disabled = isTheory;
+  setRichEditorEnabled(addAnswerRich, isTheory);
 }
 
 function isLocalhost() {
@@ -129,6 +251,7 @@ async function addQuestionFromUI(event) {
 
   const categoryName = getSelectedCategoryName();
   const subcategoryName = getSelectedSubcategoryName();
+  syncEditorToHidden(addAnswerEditor, addAnswer);
 
   if (!categoryName || !subcategoryName) {
     setAddQuestionStatus("Category and subcategory names are required.", "error");
@@ -141,7 +264,7 @@ async function addQuestionFromUI(event) {
     question: {
       type: addType.value,
       question: addQuestionText.value.trim(),
-      answer: addType.value === "theory" ? addAnswer.value.trim() : "",
+      answer: addType.value === "theory" ? addAnswer.value : "",
       code: addType.value === "program" ? addCode.value.trim() : "",
       output: addType.value === "program" ? addOutput.value.trim() : ""
     }
@@ -170,6 +293,8 @@ async function addQuestionFromUI(event) {
     subcategory.questions.push(payload.question);
 
     addQuestionForm.reset();
+    setEditorHtml(addAnswerEditor, "");
+    syncEditorToHidden(addAnswerEditor, addAnswer);
     populateAddQuestionSelectors(state.rawData);
     updateTypeFields();
     setAddQuestionStatus("Question added and questions.json updated.", "success");
@@ -192,7 +317,7 @@ async function saveEditedQuestion(formElement) {
   const questionIndex = Number(formElement.dataset.index);
   const type = formElement.querySelector(".edit-type")?.value || "theory";
   const question = formElement.querySelector(".edit-question")?.value.trim() || "";
-  const answer = formElement.querySelector(".edit-answer")?.value.trim() || "";
+  const answer = formElement.querySelector(".edit-answer")?.value || "";
   const code = formElement.querySelector(".edit-code")?.value.trim() || "";
   const output = formElement.querySelector(".edit-output")?.value.trim() || "";
 
@@ -271,7 +396,32 @@ function attachEvents() {
   addType.addEventListener("change", updateTypeFields);
   addQuestionForm.addEventListener("submit", addQuestionFromUI);
 
+  addQuestionPanel.addEventListener("click", (event) => {
+    const control = event.target.closest("[data-editor-cmd]");
+    if (!control) return;
+    event.preventDefault();
+    if (!runEditorCommand(control)) return;
+    syncEditorToHidden(addAnswerEditor, addAnswer);
+  });
+  addQuestionPanel.addEventListener("change", (event) => {
+    if (!event.target.matches(".editor-color")) return;
+    runEditorCommand(event.target);
+    syncEditorToHidden(addAnswerEditor, addAnswer);
+  });
+
   content.addEventListener("click", async (event) => {
+    const editorControl = event.target.closest("[data-editor-cmd]");
+    if (editorControl) {
+      event.preventDefault();
+      if (runEditorCommand(editorControl)) {
+        const editorRoot = editorControl.closest(".edit-rich-editor");
+        const editorInput = editorRoot?.querySelector(".edit-answer-editor");
+        const hiddenInput = editorRoot?.querySelector(".edit-answer");
+        if (editorInput && hiddenInput) syncEditorToHidden(editorInput, hiddenInput);
+      }
+      return;
+    }
+
     const target = event.target.closest("button");
     if (!target) return;
     const kind = target.dataset.kind;
@@ -303,6 +453,9 @@ function attachEvents() {
     } else if (kind === "edit-save") {
       const formElement = target.closest(".edit-form");
       if (!formElement) return;
+      const editorInput = formElement.querySelector(".edit-answer-editor");
+      const hiddenInput = formElement.querySelector(".edit-answer");
+      if (editorInput && hiddenInput) syncEditorToHidden(editorInput, hiddenInput);
       try {
         await saveEditedQuestion(formElement);
         reRender();
@@ -327,6 +480,15 @@ function attachEvents() {
       }
     }
   });
+
+  content.addEventListener("change", (event) => {
+    if (!event.target.matches(".edit-rich-editor .editor-color")) return;
+    runEditorCommand(event.target);
+    const editorRoot = event.target.closest(".edit-rich-editor");
+    const editorInput = editorRoot?.querySelector(".edit-answer-editor");
+    const hiddenInput = editorRoot?.querySelector(".edit-answer");
+    if (editorInput && hiddenInput) syncEditorToHidden(editorInput, hiddenInput);
+  });
 }
 
 async function bootstrap() {
@@ -336,6 +498,7 @@ async function bootstrap() {
     state.rawData = await loadQuestions("./data/questions.json");
     if (state.isLocalhost) {
       addQuestionPanel.classList.remove("hidden");
+      initializeAddAnswerEditor();
       populateAddQuestionSelectors(state.rawData);
       updateTypeFields();
     }

@@ -17,6 +17,88 @@ function escapeAttr(text = "") {
   return escapeHtml(text).replaceAll("\"", "&quot;");
 }
 
+function getEditorToolbarTemplate() {
+  return `<div class="rich-toolbar" role="toolbar" aria-label="Theory answer formatting toolbar">
+      <button type="button" class="btn btn-secondary small" data-editor-cmd="bold" title="Bold">B</button>
+      <button type="button" class="btn btn-secondary small" data-editor-cmd="italic" title="Italic">I</button>
+      <button type="button" class="btn btn-secondary small" data-editor-cmd="underline" title="Underline">U</button>
+      <button type="button" class="btn btn-secondary small" data-editor-cmd="insertUnorderedList" title="Bulleted list">UL</button>
+      <button type="button" class="btn btn-secondary small" data-editor-cmd="insertOrderedList" title="Numbered list">OL</button>
+      <input type="color" class="editor-color" value="#0284c7" data-editor-cmd="foreColor" aria-label="Text color">
+    </div>`;
+}
+
+function sanitizeRichHtml(input = "") {
+  const template = document.createElement("template");
+  template.innerHTML = String(input || "");
+  const allowedTags = new Set(["B", "STRONG", "I", "EM", "U", "S", "BR", "P", "DIV", "SPAN", "UL", "OL", "LI", "CODE", "PRE", "BLOCKQUOTE", "A", "H1", "H2", "H3", "H4", "FONT"]);
+  const allowedStyles = new Set(["color", "background-color", "font-weight", "font-style", "text-decoration"]);
+
+  const cleanNode = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) return;
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      node.remove();
+      return;
+    }
+
+    const element = node;
+    const tag = element.tagName.toUpperCase();
+
+    if (!allowedTags.has(tag)) {
+      const parent = element.parentNode;
+      if (!parent) return;
+      while (element.firstChild) parent.insertBefore(element.firstChild, element);
+      parent.removeChild(element);
+      return;
+    }
+
+    const attrs = Array.from(element.attributes);
+    attrs.forEach((attr) => {
+      const name = attr.name.toLowerCase();
+      if (name === "href" && tag === "A") return;
+      if (name === "style") return;
+      if (name === "color" && tag === "FONT") return;
+      element.removeAttribute(attr.name);
+    });
+
+    if (tag === "A") {
+      const href = (element.getAttribute("href") || "").trim();
+      if (!/^https?:\/\//i.test(href)) {
+        element.removeAttribute("href");
+      }
+    }
+
+    if (tag === "FONT") {
+      const color = (element.getAttribute("color") || "").trim();
+      if (color) {
+        element.style.color = color;
+      }
+      element.removeAttribute("color");
+    }
+
+    const styleText = element.getAttribute("style") || "";
+    if (styleText) {
+      const probe = document.createElement("span");
+      probe.style.cssText = styleText;
+      const cleanStyleParts = [];
+      allowedStyles.forEach((prop) => {
+        const value = probe.style.getPropertyValue(prop);
+        if (value) cleanStyleParts.push(`${prop}:${value}`);
+      });
+      if (cleanStyleParts.length) {
+        element.setAttribute("style", cleanStyleParts.join(";"));
+      } else {
+        element.removeAttribute("style");
+      }
+    }
+
+    Array.from(element.childNodes).forEach(cleanNode);
+  };
+
+  Array.from(template.content.childNodes).forEach(cleanNode);
+  return template.innerHTML;
+}
+
 function questionTemplate(question, id, isLocalhost, categoryName, subcategoryName, index, numberLabel) {
   const editButton = isLocalhost
     ? `<button class="btn btn-secondary small" data-kind="edit-open" data-id="${id}" data-show="Edit" data-hide="Close Edit">Edit</button>`
@@ -25,6 +107,7 @@ function questionTemplate(question, id, isLocalhost, categoryName, subcategoryNa
     ? `<button class="btn btn-danger small" data-kind="delete-question" data-category="${escapeAttr(categoryName)}" data-subcategory="${escapeAttr(subcategoryName)}" data-index="${index}">Delete</button>`
     : "";
   const common = `<div class="actions"></div>`;
+  const safeAnswerHtml = sanitizeRichHtml(question.answer || "");
   const editPanel = isLocalhost ? `<div id="edit-${id}" class="panel edit-panel">
       <div class="edit-form" data-category="${escapeAttr(categoryName)}" data-subcategory="${escapeAttr(subcategoryName)}" data-index="${index}">
         <label>Type
@@ -37,7 +120,11 @@ function questionTemplate(question, id, isLocalhost, categoryName, subcategoryNa
           <textarea class="edit-question" rows="2">${escapeHtml(question.question || "")}</textarea>
         </label>
         <label>Answer (Theory)
-          <textarea class="edit-answer" rows="3">${escapeHtml(question.answer || "")}</textarea>
+          <div class="rich-editor edit-rich-editor">
+            ${getEditorToolbarTemplate()}
+            <div class="rich-editor-input edit-answer-editor" contenteditable="true" role="textbox" aria-multiline="true" data-initial-answer="${encodeURIComponent(question.answer || "")}"></div>
+            <input type="hidden" class="edit-answer">
+          </div>
         </label>
         <label>Code (Program)
           <textarea class="edit-code" rows="4">${escapeHtml(question.code || "")}</textarea>
@@ -59,7 +146,7 @@ function questionTemplate(question, id, isLocalhost, categoryName, subcategoryNa
         ${editButton}
         ${deleteButton}
       </div>
-      <div id="answer-${id}" class="panel">${escapeHtml(question.answer)}</div>${editPanel}</article>`;
+      <div id="answer-${id}" class="panel rich-answer">${safeAnswerHtml}</div>${editPanel}</article>`;
   }
   const formattedCode = formatJavaCode(question.code);
   return `<article class="question-card"><h4><span class="question-number">${escapeHtml(numberLabel)}.</span> ${escapeHtml(question.question)}</h4>${common}

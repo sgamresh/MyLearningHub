@@ -53,7 +53,18 @@
       </label>
       <label class="form-field form-field-full">
         <span>Answer (Theory)</span>
-        <textarea id="add-answer" rows="3" placeholder="Write answer for theory question"></textarea>
+        <div id="add-answer-rich" class="rich-editor">
+          <div class="rich-toolbar" role="toolbar" aria-label="Theory answer formatting toolbar">
+            <button type="button" class="btn btn-secondary small" data-editor-cmd="bold" title="Bold">B</button>
+            <button type="button" class="btn btn-secondary small" data-editor-cmd="italic" title="Italic">I</button>
+            <button type="button" class="btn btn-secondary small" data-editor-cmd="underline" title="Underline">U</button>
+            <button type="button" class="btn btn-secondary small" data-editor-cmd="insertUnorderedList" title="Bulleted list">UL</button>
+            <button type="button" class="btn btn-secondary small" data-editor-cmd="insertOrderedList" title="Numbered list">OL</button>
+            <input type="color" class="editor-color" value="#0284c7" data-editor-cmd="foreColor" aria-label="Text color">
+          </div>
+          <div id="add-answer-editor" class="rich-editor-input" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Write answer for theory question"></div>
+          <input id="add-answer" type="hidden">
+        </div>
       </label>
       <label class="form-field form-field-full">
         <span>Code (Program)</span>

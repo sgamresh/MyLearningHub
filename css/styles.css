@@ -144,6 +144,64 @@ mark { background: #facc15; color: #111827; border-radius: 0.2rem; padding: 0 0.
 #add-question-form select {
   border-color: color-mix(in oklab, var(--border) 70%, var(--accent) 30%);
 }
+.rich-editor {
+  border: 1px solid color-mix(in oklab, var(--border) 70%, var(--accent) 30%);
+  border-radius: 0.7rem;
+  background: color-mix(in oklab, var(--surface) 94%, white 6%);
+  overflow: hidden;
+}
+.rich-toolbar {
+  display: flex;
+  gap: 0.32rem;
+  flex-wrap: wrap;
+  padding: 0.42rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklab, var(--surface-2) 88%, var(--surface) 12%);
+}
+.rich-toolbar .btn.small {
+  min-width: 2.1rem;
+  padding: 0.28rem 0.46rem;
+}
+.editor-color {
+  width: 2.2rem;
+  height: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  padding: 0.15rem;
+  background: transparent;
+  cursor: pointer;
+}
+.rich-editor-input {
+  min-height: 130px;
+  max-height: 320px;
+  overflow: auto;
+  padding: 0.68rem 0.72rem;
+  line-height: 1.5;
+}
+.rich-editor-input:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--accent) 30%, transparent 70%);
+}
+.rich-editor-input[contenteditable="false"] {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+.rich-editor-input p,
+.rich-editor-input ul,
+.rich-editor-input ol {
+  margin: 0.32rem 0;
+}
+.rich-answer ul,
+.rich-answer ol {
+  padding-left: 1.35rem;
+}
+.rich-answer p,
+.rich-answer li {
+  margin: 0.32rem 0;
+}
+.edit-rich-editor .rich-editor-input {
+  min-height: 110px;
+}
 #add-question-submit {
   width: fit-content;
   padding-inline: 1rem;

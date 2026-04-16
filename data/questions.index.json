@@ -1,0 +1,109 @@
+{
+    "modules": [
+        {
+            "name": "Java",
+            "slug": "java",
+            "items": [
+                {
+                    "category": "Java",
+                    "subcategory": "Strings",
+                    "file": "modules/java/java--strings.json"
+                },
+                {
+                    "category": "Java",
+                    "subcategory": "Exception Handling",
+                    "file": "modules/java/java--exception-handling.json"
+                },
+                {
+                    "category": "Java",
+                    "subcategory": "Arrays",
+                    "file": "modules/java/java--arrays.json"
+                },
+                {
+                    "category": "Java",
+                    "subcategory": "Collections",
+                    "file": "modules/java/java--collections.json"
+                },
+                {
+                    "category": "Java",
+                    "subcategory": "Filehandling",
+                    "file": "modules/java/java--filehandling.json"
+                },
+                {
+                    "category": "Java",
+                    "subcategory": "Inheritance",
+                    "file": "modules/java/java--inheritance.json"
+                },
+                {
+                    "category": "Java",
+                    "subcategory": "Overloading/ Overriding",
+                    "file": "modules/java/java--overloading-overriding.json"
+                },
+                {
+                    "category": "Java",
+                    "subcategory": "Polymorphism",
+                    "file": "modules/java/java--polymorphism.json"
+                }
+            ]
+        },
+        {
+            "name": "OOP",
+            "slug": "oop",
+            "items": [
+                {
+                    "category": "OOP",
+                    "subcategory": "Classes and Objects",
+                    "file": "modules/oop/oop--classes-and-objects.json"
+                },
+                {
+                    "category": "OOP",
+                    "subcategory": "Inheritance and Polymorphism",
+                    "file": "modules/oop/oop--inheritance-and-polymorphism.json"
+                }
+            ]
+        },
+        {
+            "name": "Manual Testing",
+            "slug": "manual-testing",
+            "items": [
+                {
+                    "category": "Manual Testing",
+                    "subcategory": "Bug Life Cycle",
+                    "file": "modules/manual-testing/manual-testing--bug-life-cycle.json"
+                },
+                {
+                    "category": "Manual Testing",
+                    "subcategory": "Theoritical QA",
+                    "file": "modules/manual-testing/manual-testing--theoritical-qa.json"
+                },
+                {
+                    "category": "Manual Testing",
+                    "subcategory": "Regression Testing",
+                    "file": "modules/manual-testing/manual-testing--regression-testing.json"
+                }
+            ]
+        },
+        {
+            "name": "Appium",
+            "slug": "appium",
+            "items": [
+                {
+                    "category": "Appium",
+                    "subcategory": "Challanges",
+                    "file": "modules/appium/appium--challanges.json"
+                }
+            ]
+        },
+        {
+            "name": "CICD Pipelines",
+            "slug": "cicd-pipelines",
+            "items": [
+                {
+                    "category": "CICD Pipelines",
+                    "subcategory": "Jenkins",
+                    "file": "modules/cicd-pipelines/cicd-pipelines--jenkins.json"
+                }
+            ]
+        }
+    ]
+}

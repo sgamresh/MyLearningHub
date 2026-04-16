@@ -297,7 +297,7 @@ async function addQuestionFromUI(event) {
     syncEditorToHidden(addAnswerEditor, addAnswer);
     populateAddQuestionSelectors(state.rawData);
     updateTypeFields();
-    setAddQuestionStatus("Question added and questions.json updated.", "success");
+    setAddQuestionStatus("Question added and data files updated.", "success");
     reRender();
   } catch (error) {
     setAddQuestionStatus(error.message, "error");
@@ -473,7 +473,7 @@ function attachEvents() {
       try {
         await deleteQuestionByLocation(categoryName, subcategoryName, questionIndex);
         populateAddQuestionSelectors(state.rawData);
-        setAddQuestionStatus("Question deleted and questions.json updated.", "success");
+        setAddQuestionStatus("Question deleted and data files updated.", "success");
         reRender();
       } catch (error) {
         setAddQuestionStatus(error.message, "error");
@@ -495,7 +495,7 @@ async function bootstrap() {
   try {
     initializeTheme();
     state.isLocalhost = isLocalhost();
-    state.rawData = await loadQuestions("./data/questions.json");
+    state.rawData = await loadQuestions("./data/questions.index.json");
     if (state.isLocalhost) {
       addQuestionPanel.classList.remove("hidden");
       initializeAddAnswerEditor();

@@ -1,6 +1,6 @@
 # Learning Hub (Static Website)
 
-Production-ready modular Java learning website using only HTML, CSS, and vanilla JavaScript.
+Production-ready modular learning website using only HTML, CSS, and vanilla JavaScript.
 
 ## Folder Structure
 
@@ -16,50 +16,44 @@ Production-ready modular Java learning website using only HTML, CSS, and vanilla
 │   ├── dataLoader.js
 │   └── renderer.js
 └── data/
-    └── questions.json
+    ├── questions.index.json
+    ├── questions.json (legacy backup)
+    └── modules/
+        └── <module-slug>/
+            └── <category-slug>--<subcategory-slug>.json
 ```
 
 ## Run Locally
 
 1. Open `index.html` directly in a browser.
-2. If your browser blocks `fetch()` on local file origin, run a tiny static server (for example: `python -m http.server`) and open `http://localhost:8000`.
+2. If your browser blocks `fetch()` on local file origin, run a static server (for example: `python -m http.server`) and open `http://localhost:8000`.
 
 ## Features Included
 
 - Nested content model: category -> subcategory -> questions
-- Theory questions with "Show Answer" toggle
-- Programming questions with "Show Code" and "Show Output" toggles
+- Theory questions with rich-formatted answers
+- Programming questions with Show Code and Show Output toggles
 - Prism.js Java syntax highlighting
 - Expand all / Collapse all
 - Dark/light mode toggle
 - Copy code button
-- Localhost-only "Add Question" form that writes to `data/questions.json` via PHP
+- Localhost-only Add/Edit/Delete flow that writes modular JSON files via PHP
 
-## Data Format (Primary: JSON)
+## Data Format (Primary: Modular JSON)
 
-Update `data/questions.json` using this shape:
+Top-level index file: `data/questions.index.json`
 
 ```json
 {
-  "categories": [
+  "modules": [
     {
-      "name": "Category Name",
-      "subcategories": [
+      "name": "Module Name",
+      "slug": "module-slug",
+      "items": [
         {
-          "name": "Subcategory Name",
-          "questions": [
-            {
-              "type": "theory",
-              "question": "Question text",
-              "answer": "Answer text"
-            },
-            {
-              "type": "program",
-              "question": "Programming problem",
-              "code": "public class Main { ... }",
-              "output": "Expected output"
-            }
-          ]
+          "category": "Category Name",
+          "subcategory": "Subcategory Name",
+          "file": "modules/module-slug/category-slug--subcategory-slug.json"
         }
       ]
     }
@@ -67,15 +61,36 @@ Update `data/questions.json` using this shape:
 }
 ```
 
+Per category/subcategory question file:
+
+```json
+{
+  "module": "Module Name",
+  "category": "Category Name",
+  "subcategory": "Subcategory Name",
+  "questions": [
+    {
+      "type": "theory",
+      "question": "Question text",
+      "answer": "<p>Rich HTML answer</p>"
+    },
+    {
+      "type": "program",
+      "question": "Programming problem",
+      "code": "public class Main { ... }",
+      "output": "Expected output"
+    }
+  ]
+}
+```
+
 ## Adding New Questions
 
-1. Choose the target category/subcategory in `data/questions.json`.
-2. Append a new question object in `questions`.
-3. For theory items use `type: "theory"` with `answer`.
-4. For coding items use `type: "program"` with `code` and `output`.
-5. Save and refresh the page.
+Use the localhost Add Question form. The app will:
 
-The UI updates automatically because all rendering is data-driven.
+1. Resolve the mapped category/subcategory file from `questions.index.json`.
+2. Create a new category/subcategory file automatically when needed.
+3. Save add/update/delete changes directly into that modular file.
 
 ## Optional Data Sources
 

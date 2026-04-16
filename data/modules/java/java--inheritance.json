@@ -1,0 +1,13 @@
+{
+  "module": "Java",
+  "category": "Java",
+  "subcategory": "Inheritance",
+  "questions": [
+    {
+      "type": "program",
+      "question": "Main.java Parent.java",
+      "code": "package javacode.inheritance;\n\nclass Base { \n    public void Print() { \n        System.out.println(\"Base\"); \n    }          } \n  \nclass Derived extends Base {     \n    public void Print() { \n        System.out.println(\"Derived\"); \n    } } \n  class Main{ \n    public static void DoPrint( Base o ) { \n        o.Print();    } \n    public static void main(String[] args) { \n        Base x = new Base(); \n        Base y = new Derived(); \n        Derived z = new Derived(); \n        DoPrint(x); \n        DoPrint(y); \n        DoPrint(z); \n    } }\n\n\n\npackage javacode.inheritance;\n\npublic class Parent {\n\n\tpublic static void main(String[] args) {\n\t\t// TODO Auto-generated method stub\n\n\t}\n\n}",
+      "output": "later"
+    }
+  ]
+}

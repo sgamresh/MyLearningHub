@@ -1,0 +1,12 @@
+{
+  "module": "Manual Testing",
+  "category": "Manual Testing",
+  "subcategory": "Bug Life Cycle",
+  "questions": [
+    {
+      "type": "theory",
+      "question": "What is a Bug life cycle?",
+      "answer": "<h3><span>1. <strong>New</strong></span></h3>\n<ul>\n<li>\nA tester finds a defect and logs it in a bug tracking tool.\n</li>\n<li>\nStatus: <em>New</em>\n</li>\n</ul>\n\n<h3><span>2. <strong>Assigned</strong></span></h3>\n<ul>\n<li>\nThe bug is assigned to a developer or team for investigation.\n</li>\n<li>\nStatus: <em>Assigned</em>\n</li>\n</ul>\n\n<h3><span>3. <strong>Open</strong></span></h3>\n<ul>\n<li>\nThe developer starts analyzing and working on the bug.\n</li>\n<li>\nStatus: <em>Open</em>\n</li>\n</ul>\n\n<h3><span>4. <strong>Fixed</strong></span></h3>\n<ul>\n<li>\nDeveloper resolves the issue and marks it as fixed.\n</li>\n<li>\nStatus: <em>Fixed</em>\n</li>\n</ul>\n\n<h3><span>5. <strong>Retest</strong></span></h3>\n<ul>\n<li>\nTester verifies the fix in a new build.\n</li>\n<li>\nStatus: <em>Retest</em>\n</li>\n</ul>\n\n<h3><span>6. <strong>Verified</strong></span></h3>\n<ul>\n<li>\nTester confirms the bug is actually fixed.\n</li>\n<li>\nStatus: <em>Verified</em>\n</li>\n</ul>\n\n<h3><span>7. <strong>Closed</strong></span></h3>\n<ul>\n<li>\nThe bug is officially closed after successful verification.\n</li>\n<li>\nStatus: <em>Closed</em></li></ul><div><span style=\"font-weight:normal\"><i><br></i></span></div><div><h2>Possible Alternate States (Important)</h2>\n<p>These depend on real-world scenarios:</p>\n<ul>\n<li>\n<strong>Rejected</strong> → Not a bug (works as expected)\n</li>\n<li>\n<strong>Duplicate</strong> → Same as an already reported bug\n</li>\n<li>\n<strong>Deferred</strong> → Will be fixed later (low priority)\n</li>\n<li>\n<strong>Reopened</strong> → Bug still exists after fix\n</li>\n<li>\n<strong>Cannot Reproduce</strong> → Not reproducible by developer/tester\n</li>\n<li>\n<strong>Blocked</strong> → Cannot proceed due to dependency</li></ul></div>"
+    }
+  ]
+}

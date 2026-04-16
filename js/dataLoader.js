@@ -38,12 +38,62 @@ function detectFormat(path) {
   return SUPPORTED_EXTENSIONS.find((ext) => path.endsWith(ext));
 }
 
-export async function loadQuestions(path = "./data/questions.json") {
+function normalizeQuestionsArray(questions = []) {
+  if (!Array.isArray(questions)) return [];
+  return questions
+    .map((q) => ({
+      type: q?.type === "program" ? "program" : "theory",
+      question: String(q?.question || "").trim(),
+      answer: String(q?.answer || ""),
+      code: String(q?.code || ""),
+      output: String(q?.output || "")
+    }))
+    .filter((q) => q.question);
+}
+
+async function loadModularJson(indexPath, indexData) {
+  const modules = Array.isArray(indexData?.modules) ? indexData.modules : [];
+  const categoriesMap = new Map();
+
+  const itemFetches = [];
+  modules.forEach((moduleItem) => {
+    const items = Array.isArray(moduleItem?.items) ? moduleItem.items : [];
+    items.forEach((entry) => {
+      const categoryName = String(entry?.category || "").trim();
+      const subcategoryName = String(entry?.subcategory || "").trim();
+      const file = String(entry?.file || "").trim();
+      if (!categoryName || !subcategoryName || !file) return;
+      const fileUrl = new URL(file, new URL(indexPath, window.location.href)).toString();
+      itemFetches.push(
+        fetch(fileUrl).then(async (res) => {
+          if (!res.ok) throw new Error(`Unable to load modular data file: ${file}`);
+          const fileData = await res.json();
+          return { categoryName, subcategoryName, questions: normalizeQuestionsArray(fileData?.questions) };
+        })
+      );
+    });
+  });
+
+  const resolvedItems = await Promise.all(itemFetches);
+  resolvedItems.forEach(({ categoryName, subcategoryName, questions }) => {
+    if (!categoriesMap.has(categoryName)) categoriesMap.set(categoryName, { name: categoryName, subcategories: [] });
+    const category = categoriesMap.get(categoryName);
+    category.subcategories.push({ name: subcategoryName, questions });
+  });
+
+  return { categories: [...categoriesMap.values()] };
+}
+
+export async function loadQuestions(path = "./data/questions.index.json") {
   const format = detectFormat(path);
   if (!format) throw new Error("Unsupported data format. Use JSON, CSV, or TXT.");
   const response = await fetch(path);
   if (!response.ok) throw new Error(`Unable to load data file: ${path}`);
-  if (format === ".json") return response.json();
+  if (format === ".json") {
+    const jsonData = await response.json();
+    if (Array.isArray(jsonData?.modules)) return loadModularJson(path, jsonData);
+    return jsonData;
+  }
   if (format === ".csv") return parseCsvToData(await response.text());
   return parseTextToData(await response.text());
 }

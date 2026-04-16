@@ -1,0 +1,13 @@
+{
+  "module": "Java",
+  "category": "Java",
+  "subcategory": "Filehandling",
+  "questions": [
+    {
+      "type": "program",
+      "question": "ReadTextFileExample.java",
+      "code": "package javacode.filehandling;\n\nimport java.io.File;\nimport java.io.FileInputStream;\nimport java.io.FileReader;\nimport java.io.IOException;\nimport java.util.Iterator;\nimport org.apache.poi.ss.usermodel.Cell;\nimport org.apache.poi.ss.usermodel.Row;\nimport org.apache.poi.xssf.usermodel.XSSFSheet;\nimport org.apache.poi.xssf.usermodel.XSSFWorkbook;\n\npublic class ReadTextFileExample {\n\n\tpublic static void main(String[] args) throws Exception {\n\t\tReadTextFileExample obj = new ReadTextFileExample();\n\n\t\t// File txtfile = new File(\"./Files/SampleTextFile_10kb.txt\");\n\t\tFile xlsxfile = new File(\"./Files/BJS_Resume_Database.xlsx\");\n\t\t// File docxfile = new File(\"./Files/SampleTextFile_10kb.txt\");\n\n\t\t// obj.readtxtFile(txtfile);\n\t\tobj.readxlsxFile(xlsxfile);\n\t\t// obj.readdocxFile(docxfile);\n\n\t}\n\n\tpublic void readtxtFile(File file) throws IOException {\n\n\t\tFileReader fr = new FileReader(file);\n\t\tint i = 0;\n\t\twhile ((i = fr.read()) != -1) {\n\t\t\tSystem.out.print((char) i);\n\n\t\t}\n\t\tfr.close();\n\t}\n\n\tpublic void readxlsxFile(File xlsxfile) throws Exception {\n\n\t\tFileInputStream fis = new FileInputStream(xlsxfile);\n\n\t\t// Finds the workbook instance for XLSX file\n\t\tXSSFWorkbook myWorkBook = new XSSFWorkbook(fis);\n\n\t\t// Return first sheet from the XLSX workbook\n\t\tXSSFSheet mySheet = myWorkBook.getSheetAt(0);\n\n\t\t// Get iterator to all the rows in current sheet\n\t\tIterator<Row> rowIterator = mySheet.iterator();\n\n\t\t// Traversing over each row of XLSX file\n\t\twhile (rowIterator.hasNext()) {\n\t\t\tRow row = rowIterator.next();\n\t\t\t// For each row, iterate through each columns\n\t\t\tIterator<Cell> cellIterator = row.cellIterator();\n\t\t\twhile (cellIterator.hasNext()) {\n\t\t\t\tCell cell = cellIterator.next();\n\n\t\t\t\tswitch (cell.getCellType()) {\n\t\t\t\tcase Cell.CELL_TYPE_STRING:\n\t\t\t\t\tSystem.out.print(cell.getStringCellValue() + \"\\t\");\n\t\t\t\t\tbreak;\n\t\t\t\tcase Cell.CELL_TYPE_NUMERIC:\n\t\t\t\t\tSystem.out.print(cell.getNumericCellValue() + \"\\t\");\n\t\t\t\t\tbreak;\n\t\t\t\tcase Cell.CELL_TYPE_BOOLEAN:\n\t\t\t\t\tSystem.out.print(cell.getBooleanCellValue() + \"\\t\");\n\t\t\t\t\tbreak;\n\t\t\t\tdefault:\n\t\t\t\t}\n\t\t\t}\n\t\t\tSystem.out.println(\"\");\n\t\t}\n\n\t}\n\n\tpublic void readdocxFile(File docxfile) {\n\n\t}\n\n}",
+      "output": "later"
+    }
+  ]
+}

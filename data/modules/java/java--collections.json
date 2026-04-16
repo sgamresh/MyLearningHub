@@ -1,0 +1,37 @@
+{
+  "module": "Java",
+  "category": "Java",
+  "subcategory": "Collections",
+  "questions": [
+    {
+      "type": "program",
+      "question": "CollectionApiExamples.java",
+      "code": "package javacode.collectionsapi;\n\nimport java.util.ArrayList;\nimport java.util.Collection;\nimport java.util.Iterator;\n\npublic class CollectionApiExamples {\n\n\tpublic static void main(String[] args) {\n\t\t\n\t\tCollection values = new ArrayList();\n\t\tvalues.add(3); values.add(\"Amresh\"); values.add(3.6f);\n\n\t\t//Using Iterator \n\t\tIterator i =  values.iterator();\n\t\t\n\t\tSystem.out.println(\"Using Normal SYSOUT\");\n\t\t//System.out.println(i.next()); System.out.println(i.next()); System.out.println(i.next());\t\n\t\t\n\t\tSystem.out.println(\"Using Normal for loop\");\n\t\tfor(int x =0; x<3; x++) {\n\t\t\tSystem.out.println(i.next());\n\t\t}\n\t\t\n\t\tSystem.out.println(\"Using Iterator\");\n\t\twhile(i.hasNext()){\n\t\t\tSystem.out.println(i.next());\n\t\t}\n\t\t\n\t\tSystem.out.println(\"Using Enhanced For loop\");\n\t\tfor(Object j:values) {\n\t\t\tSystem.out.println(j);\n\t\t}\n\t\t\n\t\t//Generics Integer\n\t\tCollection<Integer> values1 = new ArrayList();\n\t\tvalues1.add(3); values1.add(5); values1.add(3);\n\n\t\tSystem.out.println(\"Using Integer Enhanced For loop\");\n\t\tfor(Integer j:values1) {\n\t\t\tSystem.out.println(j);\n\t\t}\n\t\t\n\t}\n\n}",
+      "output": "later"
+    },
+    {
+      "type": "program",
+      "question": "HashSetExamples.java",
+      "code": "package javacode.collectionsapi;\n\nimport java.util.HashSet;\nimport java.util.Iterator;\nimport java.util.Set;\n\npublic class HashSetExamples {\n\n\tpublic static void main(String[] args) {\n\t\t\n\t\tSet<Integer> hs = new HashSet<Integer>();\n\t\ths.add(23);\n\t\ths.add(45);\n\t\t//System.out.println(hs.contains(23));\n\t\n\t\t\n\t\t\n\t\tIterator<Integer> it = hs.iterator();\n\t\t\n\t\twhile(it.hasNext())\n\t\t{\n\t\t\tint x = it.next();\n\t\t\tSystem.out.println(x);\n\t\t}\n\n\t}\n\n}",
+      "output": "later"
+    },
+    {
+      "type": "program",
+      "question": "ListExamples.java",
+      "code": "package javacode.collectionsapi;\n\nimport java.util.ArrayList;\nimport java.util.LinkedList;\nimport java.util.List;\n\nimport org.testng.annotations.Test;\n\npublic class ListExamples {\n\n\t@Test\n\tpublic void ListExample1() {\n//\t\tDuplicate elements are allowed in a List\n\t\t\n//\t\tif you know the size is fixed, then go for Array. Else go for Arraylist.\n//\t\t.add(element);\n//\t\t.size();\n//\t\t.remove(index);\n//\t\t.iterator();\n//\t\t.get(index);\n//\t\t.set(index, value);\n//\t\t.allAll(Collection);\n//\t\t.removeAll();\n//\t\t.clear()\n//\t\t.lastIndexOf();\n//\t\t.clone();\n//\t\t.contains();\n//\t\t.isEmpty();\n//\t\t.trimToSize(;)\n//\t\t.toArray{};\n\t\t\n//\t\tSyntax\n//\t\tArrayList <Type> arrayList = new ArrayList<>();\n\t\t\n\t\tArrayList <String> arrayList = new ArrayList<String>();\n\t\tarrayList.add(\"Amresh\");\n\t\tSystem.out.println(arrayList);\n\t\t\n\t\t\n\t\tList value = new ArrayList();\n\t\tvalue.add(7);\n\t\tvalue.add(\"Amresh\");\n\t\tSystem.out.println(value);\n\t\t\n\t\tList<Integer> values = new ArrayList<Integer>();\n\t\tvalues.add(23);\n\t\tSystem.out.println(values);\n\t\t\n\t\tList<Integer> valuesl = new LinkedList<Integer>();\n\t\tvaluesl.add(23);\n\t\tSystem.out.println(valuesl);\n\t\t\n//\t\tArrayList is implemented as a dynamic Array. and it is slow.\n//\t\tLinked List is implemented as a double Linked List and it is Fast.\n\n\t\t\n\n\t}\n\n}",
+      "output": "later"
+    },
+    {
+      "type": "program",
+      "question": "MapExamples.java",
+      "code": "package javacode.collectionsapi;\n\nimport java.util.HashMap;\nimport java.util.LinkedHashMap;\nimport java.util.Map;\n\npublic class MapExamples {\n\n\tpublic static void main(String[] args) {\n\n\t\t//Key Value relationship\n\t\t//Map is an Interface.\n//\t\tMap hm = new HashMap();\n//\t\tMap ht = new HashTable();\n//\t\tMap thm = new TreeHashMap();\n//\t\tMap lhm = new LinkedHashMap();\n\t\t\n\t\t\n\t\tHashMap<Integer , Integer> hmi = new HashMap<Integer , Integer>();\n\t\thmi.put(23, 32);\n\t\tSystem.out.println(hmi.get(23));\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n//\t\tm.put(\"Amresh\", 1234);\n//\t\tSystem.out.println(\"\"+m.get(\"Amresh\"));\n//\t\tSystem.out.println(m);\n//\t\t\n\t\t\n\t\t\n\t\n\t}\n\n}",
+      "output": "later"
+    },
+    {
+      "type": "program",
+      "question": "SetExamples.java",
+      "code": "package javacode.collectionsapi;\n\npublic class SetExamples {\n\n\tpublic static void main(String[] args) {\n\t\t//Unique Elements\n\t\t//Random sequence\n\n\t}\n\n}",
+      "output": "later"
+    }
+  ]
+}

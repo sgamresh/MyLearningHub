@@ -2,6 +2,7 @@ import { loadQuestions } from "./dataLoader.js";
 import { renderApp, getCounts } from "./renderer.js";
 
 const STORAGE_KEYS = { theme: "java-learning-theme" };
+const NEW_OPTION_VALUE = "__new__";
 const state = {
   rawData: { categories: [] },
   expandedSections: new Set(),
@@ -13,8 +14,11 @@ const stats = document.getElementById("stats");
 const addQuestionPanel = document.getElementById("add-question-panel");
 const addQuestionForm = document.getElementById("add-question-form");
 const addCategory = document.getElementById("add-category");
+const addCategoryNew = document.getElementById("add-category-new");
 const addSubcategory = document.getElementById("add-subcategory");
+const addSubcategoryNew = document.getElementById("add-subcategory-new");
 const addType = document.getElementById("add-type");
+const addQuestionText = document.getElementById("add-question-text");
 const addAnswer = document.getElementById("add-answer");
 const addCode = document.getElementById("add-code");
 const addOutput = document.getElementById("add-output");
@@ -33,27 +37,76 @@ function reRender() {
   updateStats();
 }
 
+function setAddQuestionStatus(message, type = "info") {
+  addQuestionStatus.textContent = message;
+  addQuestionStatus.classList.remove("status-success", "status-error");
+  if (type === "success") addQuestionStatus.classList.add("status-success");
+  if (type === "error") addQuestionStatus.classList.add("status-error");
+}
+
+function setInputVisibility(input, visible) {
+  input.classList.toggle("hidden", !visible);
+  input.required = visible;
+  if (!visible) input.value = "";
+}
+
+function appendSelectOption(selectElement, value, label) {
+  const opt = document.createElement("option");
+  opt.value = value;
+  opt.textContent = label;
+  selectElement.appendChild(opt);
+}
+
+function getSelectedCategoryName() {
+  return addCategory.value === NEW_OPTION_VALUE ? addCategoryNew.value.trim() : addCategory.value;
+}
+
+function getSelectedSubcategoryName() {
+  return addSubcategory.value === NEW_OPTION_VALUE ? addSubcategoryNew.value.trim() : addSubcategory.value;
+}
+
 function populateAddQuestionSelectors(data) {
   addCategory.innerHTML = "";
-  data.categories.forEach((category) => {
-    const opt = document.createElement("option");
-    opt.value = category.name;
-    opt.textContent = category.name;
-    addCategory.appendChild(opt);
-  });
+  data.categories.forEach((category) => appendSelectOption(addCategory, category.name, category.name));
+  appendSelectOption(addCategory, NEW_OPTION_VALUE, "+ Add new category");
+
+  if (data.categories.length === 0) {
+    addCategory.value = NEW_OPTION_VALUE;
+  }
+  setInputVisibility(addCategoryNew, addCategory.value === NEW_OPTION_VALUE);
   updateSubcategories();
 }
 
 function updateSubcategories() {
   addSubcategory.innerHTML = "";
+  if (addCategory.value === NEW_OPTION_VALUE) {
+    appendSelectOption(addSubcategory, NEW_OPTION_VALUE, "+ Add new subcategory");
+    addSubcategory.value = NEW_OPTION_VALUE;
+    setInputVisibility(addSubcategoryNew, true);
+    return;
+  }
+
   const category = state.rawData.categories.find((item) => item.name === addCategory.value);
-  if (!category) return;
-  category.subcategories.forEach((subcategory) => {
-    const opt = document.createElement("option");
-    opt.value = subcategory.name;
-    opt.textContent = subcategory.name;
-    addSubcategory.appendChild(opt);
-  });
+  if (!category) {
+    appendSelectOption(addSubcategory, NEW_OPTION_VALUE, "+ Add new subcategory");
+    addSubcategory.value = NEW_OPTION_VALUE;
+    setInputVisibility(addSubcategoryNew, true);
+    return;
+  }
+
+  category.subcategories.forEach((subcategory) => appendSelectOption(addSubcategory, subcategory.name, subcategory.name));
+  appendSelectOption(addSubcategory, NEW_OPTION_VALUE, "+ Add new subcategory");
+  setInputVisibility(addSubcategoryNew, addSubcategory.value === NEW_OPTION_VALUE);
+}
+
+function handleCategorySelection() {
+  const isNewCategory = addCategory.value === NEW_OPTION_VALUE;
+  setInputVisibility(addCategoryNew, isNewCategory);
+  updateSubcategories();
+}
+
+function handleSubcategorySelection() {
+  setInputVisibility(addSubcategoryNew, addSubcategory.value === NEW_OPTION_VALUE);
 }
 
 function updateTypeFields() {
@@ -74,12 +127,20 @@ async function addQuestionFromUI(event) {
   event.preventDefault();
   if (!isLocalhost()) return;
 
+  const categoryName = getSelectedCategoryName();
+  const subcategoryName = getSelectedSubcategoryName();
+
+  if (!categoryName || !subcategoryName) {
+    setAddQuestionStatus("Category and subcategory names are required.", "error");
+    return;
+  }
+
   const payload = {
-    category: addCategory.value,
-    subcategory: addSubcategory.value,
+    category: categoryName,
+    subcategory: subcategoryName,
     question: {
       type: addType.value,
-      question: document.getElementById("add-question-text").value.trim(),
+      question: addQuestionText.value.trim(),
       answer: addType.value === "theory" ? addAnswer.value.trim() : "",
       code: addType.value === "program" ? addCode.value.trim() : "",
       output: addType.value === "program" ? addOutput.value.trim() : ""
@@ -95,15 +156,26 @@ async function addQuestionFromUI(event) {
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || "Failed to save question.");
 
-    const category = state.rawData.categories.find((item) => item.name === payload.category);
-    const subcategory = category?.subcategories.find((item) => item.name === payload.subcategory);
-    subcategory?.questions.push(payload.question);
+    let category = state.rawData.categories.find((item) => item.name === payload.category);
+    if (!category) {
+      category = { name: payload.category, subcategories: [] };
+      state.rawData.categories.push(category);
+    }
+
+    let subcategory = category.subcategories.find((item) => item.name === payload.subcategory);
+    if (!subcategory) {
+      subcategory = { name: payload.subcategory, questions: [] };
+      category.subcategories.push(subcategory);
+    }
+    subcategory.questions.push(payload.question);
+
     addQuestionForm.reset();
+    populateAddQuestionSelectors(state.rawData);
     updateTypeFields();
-    addQuestionStatus.textContent = "Question added and questions.json updated.";
+    setAddQuestionStatus("Question added and questions.json updated.", "success");
     reRender();
   } catch (error) {
-    addQuestionStatus.textContent = error.message;
+    setAddQuestionStatus(error.message, "error");
   }
 }
 
@@ -152,6 +224,31 @@ async function saveEditedQuestion(formElement) {
   }
 }
 
+async function deleteQuestionByLocation(categoryName, subcategoryName, questionIndex) {
+  const payload = {
+    action: "delete",
+    category: categoryName,
+    subcategory: subcategoryName,
+    questionIndex
+  };
+
+  const response = await fetch("./api/save-question.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || "Failed to delete question.");
+
+  const category = state.rawData.categories.find((item) => item.name === categoryName);
+  const subcategory = category?.subcategories.find((item) => item.name === subcategoryName);
+  if (!subcategory || !Array.isArray(subcategory.questions)) return;
+
+  if (questionIndex >= 0 && questionIndex < subcategory.questions.length) {
+    subcategory.questions.splice(questionIndex, 1);
+  }
+}
+
 function expandCollapseAll(expand) {
   state.expandedSections.clear();
   if (expand) {
@@ -169,7 +266,8 @@ function attachEvents() {
   document.getElementById("theme-toggle").addEventListener("click", () => setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark"));
   document.getElementById("expand-all").addEventListener("click", () => expandCollapseAll(true));
   document.getElementById("collapse-all").addEventListener("click", () => expandCollapseAll(false));
-  addCategory.addEventListener("change", updateSubcategories);
+  addCategory.addEventListener("change", handleCategorySelection);
+  addSubcategory.addEventListener("change", handleSubcategorySelection);
   addType.addEventListener("change", updateTypeFields);
   addQuestionForm.addEventListener("submit", addQuestionFromUI);
 
@@ -209,7 +307,23 @@ function attachEvents() {
         await saveEditedQuestion(formElement);
         reRender();
       } catch (error) {
-        addQuestionStatus.textContent = error.message;
+        setAddQuestionStatus(error.message, "error");
+      }
+    } else if (kind === "delete-question") {
+      if (!isLocalhost()) return;
+      const categoryName = target.dataset.category || "";
+      const subcategoryName = target.dataset.subcategory || "";
+      const questionIndex = Number(target.dataset.index);
+      const shouldDelete = window.confirm("Delete this question permanently?");
+      if (!shouldDelete) return;
+
+      try {
+        await deleteQuestionByLocation(categoryName, subcategoryName, questionIndex);
+        populateAddQuestionSelectors(state.rawData);
+        setAddQuestionStatus("Question deleted and questions.json updated.", "success");
+        reRender();
+      } catch (error) {
+        setAddQuestionStatus(error.message, "error");
       }
     }
   });

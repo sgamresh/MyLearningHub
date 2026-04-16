@@ -33,50 +33,58 @@ $question = $payload["question"] ?? null;
 $action = trim((string)($payload["action"] ?? "add"));
 $questionIndex = isset($payload["questionIndex"]) ? (int)$payload["questionIndex"] : -1;
 
-if ($categoryName === "" || $subcategoryName === "" || !is_array($question)) {
+if ($categoryName === "" || $subcategoryName === "") {
   http_response_code(400);
-  echo json_encode(["error" => "Missing category/subcategory/question data."]);
+  echo json_encode(["error" => "Missing category/subcategory data."]);
   exit;
 }
 
-if (!in_array($action, ["add", "update"], true)) {
+if (!in_array($action, ["add", "update", "delete"], true)) {
   http_response_code(400);
-  echo json_encode(["error" => "Invalid action. Use add or update."]);
+  echo json_encode(["error" => "Invalid action. Use add, update, or delete."]);
   exit;
 }
 
-$type = trim((string)($question["type"] ?? ""));
-$text = trim((string)($question["question"] ?? ""));
-
-if (!in_array($type, ["theory", "program"], true) || $text === "") {
-  http_response_code(400);
-  echo json_encode(["error" => "Question type and question text are required."]);
-  exit;
-}
-
-$cleanQuestion = [
-  "type" => $type,
-  "question" => $text
-];
-
-if ($type === "theory") {
-  $answer = trim((string)($question["answer"] ?? ""));
-  if ($answer === "") {
+if ($action !== "delete") {
+  if (!is_array($question)) {
     http_response_code(400);
-    echo json_encode(["error" => "Answer is required for theory question."]);
+    echo json_encode(["error" => "Missing question data."]);
     exit;
   }
-  $cleanQuestion["answer"] = $answer;
-} else {
-  $code = trim((string)($question["code"] ?? ""));
-  $output = trim((string)($question["output"] ?? ""));
-  if ($code === "" || $output === "") {
+
+  $type = trim((string)($question["type"] ?? ""));
+  $text = trim((string)($question["question"] ?? ""));
+
+  if (!in_array($type, ["theory", "program"], true) || $text === "") {
     http_response_code(400);
-    echo json_encode(["error" => "Code and output are required for program question."]);
+    echo json_encode(["error" => "Question type and question text are required."]);
     exit;
   }
-  $cleanQuestion["code"] = $code;
-  $cleanQuestion["output"] = $output;
+
+  $cleanQuestion = [
+    "type" => $type,
+    "question" => $text
+  ];
+
+  if ($type === "theory") {
+    $answer = trim((string)($question["answer"] ?? ""));
+    if ($answer === "") {
+      http_response_code(400);
+      echo json_encode(["error" => "Answer is required for theory question."]);
+      exit;
+    }
+    $cleanQuestion["answer"] = $answer;
+  } else {
+    $code = trim((string)($question["code"] ?? ""));
+    $output = trim((string)($question["output"] ?? ""));
+    if ($code === "" || $output === "") {
+      http_response_code(400);
+      echo json_encode(["error" => "Code and output are required for program question."]);
+      exit;
+    }
+    $cleanQuestion["code"] = $code;
+    $cleanQuestion["output"] = $output;
+  }
 }
 
 $jsonPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . "questions.json";
@@ -96,38 +104,72 @@ if (!is_array($data) || !isset($data["categories"]) || !is_array($data["categori
   exit;
 }
 
-$subcategoryFound = false;
-foreach ($data["categories"] as &$category) {
-  if (($category["name"] ?? "") !== $categoryName) {
-    continue;
-  }
-  foreach ($category["subcategories"] as &$subcategory) {
-    if (($subcategory["name"] ?? "") !== $subcategoryName) {
-      continue;
-    }
-    if (!isset($subcategory["questions"]) || !is_array($subcategory["questions"])) {
-      $subcategory["questions"] = [];
-    }
-    if ($action === "update") {
-      if ($questionIndex < 0 || $questionIndex >= count($subcategory["questions"])) {
-        http_response_code(404);
-        echo json_encode(["error" => "Question index not found for update."]);
-        exit;
-      }
-      $subcategory["questions"][$questionIndex] = $cleanQuestion;
-    } else {
-      $subcategory["questions"][] = $cleanQuestion;
-    }
-    $subcategoryFound = true;
-    break 2;
+$categoryIndex = null;
+foreach ($data["categories"] as $index => $category) {
+  if (($category["name"] ?? "") === $categoryName) {
+    $categoryIndex = $index;
+    break;
   }
 }
-unset($category, $subcategory);
 
-if (!$subcategoryFound) {
-  http_response_code(404);
-  echo json_encode(["error" => "Selected category/subcategory was not found."]);
-  exit;
+if ($categoryIndex === null) {
+  if ($action === "update") {
+    http_response_code(404);
+    echo json_encode(["error" => "Selected category/subcategory was not found."]);
+    exit;
+  }
+  $data["categories"][] = [
+    "name" => $categoryName,
+    "subcategories" => []
+  ];
+  $categoryIndex = count($data["categories"]) - 1;
+}
+
+if (!isset($data["categories"][$categoryIndex]["subcategories"]) || !is_array($data["categories"][$categoryIndex]["subcategories"])) {
+  $data["categories"][$categoryIndex]["subcategories"] = [];
+}
+
+$subcategoryIndex = null;
+foreach ($data["categories"][$categoryIndex]["subcategories"] as $index => $subcategory) {
+  if (($subcategory["name"] ?? "") === $subcategoryName) {
+    $subcategoryIndex = $index;
+    break;
+  }
+}
+
+if ($subcategoryIndex === null) {
+  if ($action === "update") {
+    http_response_code(404);
+    echo json_encode(["error" => "Selected category/subcategory was not found."]);
+    exit;
+  }
+  $data["categories"][$categoryIndex]["subcategories"][] = [
+    "name" => $subcategoryName,
+    "questions" => []
+  ];
+  $subcategoryIndex = count($data["categories"][$categoryIndex]["subcategories"]) - 1;
+}
+
+if (!isset($data["categories"][$categoryIndex]["subcategories"][$subcategoryIndex]["questions"]) || !is_array($data["categories"][$categoryIndex]["subcategories"][$subcategoryIndex]["questions"])) {
+  $data["categories"][$categoryIndex]["subcategories"][$subcategoryIndex]["questions"] = [];
+}
+
+if ($action === "update") {
+  if ($questionIndex < 0 || $questionIndex >= count($data["categories"][$categoryIndex]["subcategories"][$subcategoryIndex]["questions"])) {
+    http_response_code(404);
+    echo json_encode(["error" => "Question index not found for update."]);
+    exit;
+  }
+  $data["categories"][$categoryIndex]["subcategories"][$subcategoryIndex]["questions"][$questionIndex] = $cleanQuestion;
+} elseif ($action === "delete") {
+  if ($questionIndex < 0 || $questionIndex >= count($data["categories"][$categoryIndex]["subcategories"][$subcategoryIndex]["questions"])) {
+    http_response_code(404);
+    echo json_encode(["error" => "Question index not found for delete."]);
+    exit;
+  }
+  array_splice($data["categories"][$categoryIndex]["subcategories"][$subcategoryIndex]["questions"], $questionIndex, 1);
+} else {
+  $data["categories"][$categoryIndex]["subcategories"][$subcategoryIndex]["questions"][] = $cleanQuestion;
 }
 
 $encoded = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

@@ -17,9 +17,12 @@ function escapeAttr(text = "") {
   return escapeHtml(text).replaceAll("\"", "&quot;");
 }
 
-function questionTemplate(question, id, isLocalhost, categoryName, subcategoryName, index) {
+function questionTemplate(question, id, isLocalhost, categoryName, subcategoryName, index, numberLabel) {
   const editButton = isLocalhost
     ? `<button class="btn btn-secondary small" data-kind="edit-open" data-id="${id}" data-show="Edit" data-hide="Close Edit">Edit</button>`
+    : "";
+  const deleteButton = isLocalhost
+    ? `<button class="btn btn-danger small" data-kind="delete-question" data-category="${escapeAttr(categoryName)}" data-subcategory="${escapeAttr(subcategoryName)}" data-index="${index}">Delete</button>`
     : "";
   const common = `<div class="actions"></div>`;
   const editPanel = isLocalhost ? `<div id="edit-${id}" class="panel edit-panel">
@@ -50,17 +53,22 @@ function questionTemplate(question, id, isLocalhost, categoryName, subcategoryNa
     </div>` : "";
 
   if (question.type === "theory") {
-    return `<article class="question-card"><h4>${escapeHtml(question.question)}</h4>${common}
-      <button class="btn small answer-btn" data-kind="toggle" data-id="answer-${id}" data-show="Show Answer" data-hide="Hide Answer">Show Answer</button>
+    return `<article class="question-card"><h4><span class="question-number">${escapeHtml(numberLabel)}.</span> ${escapeHtml(question.question)}</h4>${common}
+      <div class="program-controls">
+        <button class="btn small answer-btn" data-kind="toggle" data-id="answer-${id}" data-show="Show Answer" data-hide="Hide Answer">Show Answer</button>
+        ${editButton}
+        ${deleteButton}
+      </div>
       <div id="answer-${id}" class="panel">${escapeHtml(question.answer)}</div>${editPanel}</article>`;
   }
   const formattedCode = formatJavaCode(question.code);
-  return `<article class="question-card"><h4>${escapeHtml(question.question)}</h4>${common}
+  return `<article class="question-card"><h4><span class="question-number">${escapeHtml(numberLabel)}.</span> ${escapeHtml(question.question)}</h4>${common}
     <div class="program-controls">
       <button class="btn small code-btn" data-kind="toggle" data-id="code-${id}" data-show="Show Code" data-hide="Hide Code">Show Code</button>
       <button class="btn small" data-kind="copy" data-copy="${encodeURIComponent(question.code)}">Copy Code</button>
       <button class="btn small output-btn" data-kind="toggle" data-id="output-${id}" data-show="Show Output" data-hide="Hide Output">Show Output</button>
       ${editButton}
+      ${deleteButton}
     </div>
     <div id="code-${id}" class="panel"><pre><code class="language-java">${escapeHtml(formattedCode)}</code></pre></div>
     <div id="output-${id}" class="panel output-panel">${escapeHtml(question.output)}</div>${editPanel}</article>`;
@@ -150,15 +158,18 @@ export function renderApp(container, data, state) {
     return;
   }
   let html = "";
-  data.categories.forEach((category) => {
+  data.categories.forEach((category, categoryIndex) => {
     const ck = `category:${category.name}`;
-    html += sectionTemplate(category.name, 1, ck, state.expandedSections.has(ck));
-    category.subcategories.forEach((subcategory) => {
+    const categoryNumber = `${categoryIndex + 1}`;
+    html += sectionTemplate(`${categoryNumber}. ${category.name}`, 1, ck, state.expandedSections.has(ck));
+    category.subcategories.forEach((subcategory, subcategoryIndex) => {
       const sk = `subcategory:${category.name}:${subcategory.name}`;
-      html += sectionTemplate(subcategory.name, 2, sk, state.expandedSections.has(sk));
+      const subcategoryNumber = `${categoryNumber}.${subcategoryIndex + 1}`;
+      html += sectionTemplate(`${subcategoryNumber}. ${subcategory.name}`, 2, sk, state.expandedSections.has(sk));
       subcategory.questions.forEach((question, index) => {
+        const questionNumber = `${subcategoryNumber}.${index + 1}`;
         const id = `${category.name}|${subcategory.name}|${index}`;
-        html += questionTemplate(question, id, state.isLocalhost, category.name, subcategory.name, index);
+        html += questionTemplate(question, id, state.isLocalhost, category.name, subcategory.name, index, questionNumber);
       });
       html += "</div></section>";
     });

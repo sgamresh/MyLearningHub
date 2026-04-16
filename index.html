@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Learning Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="./css/styles.css">
@@ -30,10 +33,12 @@
       <label class="form-field">
         <span>Category</span>
         <select id="add-category" required aria-label="Select category"></select>
+        <input id="add-category-new" type="text" class="hidden" placeholder="Enter new category name" aria-label="Enter new category name">
       </label>
       <label class="form-field">
         <span>Subcategory</span>
         <select id="add-subcategory" required aria-label="Select subcategory"></select>
+        <input id="add-subcategory-new" type="text" class="hidden" placeholder="Enter new subcategory name" aria-label="Enter new subcategory name">
       </label>
       <label class="form-field">
         <span>Question Type</span>

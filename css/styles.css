@@ -6,6 +6,7 @@
   --text: #e2e8f0;
   --muted: #94a3b8;
   --accent: #38bdf8;
+  --accent-strong: #0ea5e9;
   --border: #475569;
 }
 :root[data-theme="light"] {
@@ -16,20 +17,28 @@
   --text: #0f172a;
   --muted: #475569;
   --accent: #0284c7;
+  --accent-strong: #0369a1;
   --border: #cbd5e1;
 }
 * { box-sizing: border-box; }
-body { margin: 0; font-family: Inter, Segoe UI, Arial, sans-serif; background: radial-gradient(circle at top, color-mix(in oklab, var(--bg) 85%, #0ea5e9 15%) 0%, var(--bg) 40%); color: var(--text); line-height: 1.42; }
+body { margin: 0; font-family: Manrope, Segoe UI, Arial, sans-serif; background: radial-gradient(circle at top, color-mix(in oklab, var(--bg) 85%, #0ea5e9 15%) 0%, var(--bg) 40%); color: var(--text); line-height: 1.42; }
 .app-header { display: flex; justify-content: space-between; gap: 0.9rem; align-items: center; padding: 0.85rem 1.2rem; border-bottom: 1px solid var(--border); background: color-mix(in oklab, var(--surface) 88%, var(--accent) 12%); position: sticky; top: 0; z-index: 110; backdrop-filter: blur(8px); }
 .branding h1 { margin: 0 0 0.15rem; font-size: 1.32rem; letter-spacing: 0.01em; }
 .branding p { margin: 0; color: var(--muted); font-size: 0.88rem; }
 .sticky { position: sticky; top: 0; z-index: 100; }
 .toolbar { display: flex; gap: 0.5rem; padding: 0.65rem 1.2rem; border-bottom: 1px solid var(--border); background: color-mix(in oklab, var(--bg) 78%, var(--surface) 22%); backdrop-filter: blur(8px); }
-input, select, textarea { width: 100%; padding: 0.52rem 0.64rem; border-radius: 0.5rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 0.9rem; }
+input, select, textarea { width: 100%; padding: 0.6rem 0.72rem; border-radius: 0.6rem; border: 1px solid var(--border); background: color-mix(in oklab, var(--surface) 92%, white 8%); color: var(--text); font-size: 0.9rem; transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: color-mix(in oklab, var(--accent-strong) 65%, white 35%); box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 20%, transparent 80%); }
 .btn { border: 1px solid var(--accent); background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #f8fafc; border-radius: 0.55rem; padding: 0.5rem 0.78rem; cursor: pointer; font-weight: 700; letter-spacing: 0.01em; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28); transition: transform 140ms ease, filter 140ms ease, box-shadow 140ms ease; font-size: 0.86rem; }
 .btn:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 10px 24px rgba(2, 132, 199, 0.4); }
 .btn-secondary { background: transparent; color: var(--text); border-color: var(--border); }
 .btn.small { padding: 0.34rem 0.56rem; font-size: 0.8rem; }
+.btn-danger {
+  background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
+  border-color: #b91c1c;
+  color: #fff1f2;
+  box-shadow: 0 4px 14px rgba(185, 28, 28, 0.32);
+}
 .answer-btn {
   background: linear-gradient(90deg, #f59e0b 0%, #f97316 100%);
   border-color: #f97316;
@@ -62,6 +71,10 @@ input, select, textarea { width: 100%; padding: 0.52rem 0.64rem; border-radius: 
 .section-content.open { max-height: 10000px; }
 .question-card { margin: 0.5rem; border: 1px solid var(--border); border-radius: 0.62rem; padding: 0.62rem; background: var(--surface); }
 .question-card h4 { margin: 0 0 0.48rem; font-size: 0.95rem; line-height: 1.35; }
+.question-number {
+  color: color-mix(in oklab, var(--text) 68%, var(--accent) 32%);
+  font-weight: 800;
+}
 .actions, .program-controls { display: flex; gap: 0.38rem; margin-bottom: 0.42rem; flex-wrap: wrap; }
 .panel { display: none; border: 1px solid var(--border); border-radius: 0.52rem; padding: 0.48rem; background: #0b1220; color: #dbeafe; margin-top: 0.32rem; font-size: 0.9rem; }
 :root[data-theme="light"] .panel { background: #eff6ff; color: #0f172a; }
@@ -86,36 +99,41 @@ input, select, textarea { width: 100%; padding: 0.52rem 0.64rem; border-radius: 
   margin-top: 0.2rem;
 }
 pre { margin: 0; overflow: auto; }
+pre, code, textarea { font-family: "JetBrains Mono", Consolas, monospace; }
 mark { background: #facc15; color: #111827; border-radius: 0.2rem; padding: 0 0.1rem; }
 .empty-state { text-align: center; margin: 2rem auto; padding: 2rem; max-width: 520px; border: 1px dashed var(--border); border-radius: 0.8rem; background: var(--surface); }
 .add-question-panel {
-  margin: 0.4rem auto 1rem;
-  padding: 0.8rem;
+  margin: 0.5rem auto 1rem;
+  padding: 1rem;
   border: 1px solid color-mix(in oklab, var(--accent) 45%, var(--border) 55%);
-  border-radius: 0.9rem;
-  background: linear-gradient(180deg, color-mix(in oklab, var(--surface) 86%, var(--accent) 14%) 0%, var(--surface) 100%);
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.18);
+  border-radius: 1rem;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in oklab, var(--accent) 22%, transparent 78%) 0, transparent 38%),
+    linear-gradient(180deg, color-mix(in oklab, var(--surface) 86%, var(--accent) 14%) 0%, var(--surface) 100%);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.2);
   max-width: 1220px;
 }
 .add-question-panel h2 {
   margin-top: 0;
-  font-size: 0.98rem;
+  font-size: 1.02rem;
   color: color-mix(in oklab, var(--text) 75%, var(--accent) 25%);
+  letter-spacing: 0.01em;
 }
 #add-question-form {
   display: grid;
-  grid-template-columns: repeat(2, minmax(240px, 1fr));
-  gap: 0.52rem;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 0.65rem;
 }
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 .form-field span {
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   color: color-mix(in oklab, var(--text) 72%, var(--accent) 28%);
 }
 .form-field-full {
@@ -126,24 +144,22 @@ mark { background: #facc15; color: #111827; border-radius: 0.2rem; padding: 0 0.
 #add-question-form select {
   border-color: color-mix(in oklab, var(--border) 70%, var(--accent) 30%);
 }
-#add-question-form textarea:focus,
-#add-question-form input:focus,
-#add-question-form select:focus {
-  outline: 2px solid color-mix(in oklab, var(--accent) 55%, white 45%);
-  outline-offset: 1px;
-}
 #add-question-submit {
   width: fit-content;
+  padding-inline: 1rem;
 }
 .form-submit {
   grid-column: 1 / -1;
 }
 #add-question-status {
-  margin: 0.55rem 0 0;
+  margin: 0.65rem 0 0;
   color: color-mix(in oklab, var(--text) 65%, var(--accent) 35%);
   font-weight: 600;
-  font-size: 0.84rem;
+  font-size: 0.86rem;
+  min-height: 1.25rem;
 }
+.status-success { color: #16a34a !important; }
+.status-error { color: #dc2626 !important; }
 .hidden { display: none; }
 @media (max-width: 980px) { #add-question-form { grid-template-columns: 1fr; } .content, .add-question-panel { max-width: 100%; } }
 @media (max-width: 640px) { .toolbar { flex-direction: column; } .app-header { flex-direction: column; align-items: flex-start; } }

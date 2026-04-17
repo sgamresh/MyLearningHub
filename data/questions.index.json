@@ -104,6 +104,17 @@
                     "file": "modules/cicd-pipelines/cicd-pipelines--jenkins.json"
                 }
             ]
+        },
+        {
+            "name": "Android",
+            "slug": "android",
+            "items": [
+                {
+                    "category": "Android",
+                    "subcategory": "ADB Commands",
+                    "file": "modules/android/android--adb-commands.json"
+                }
+            ]
         }
     ]
 }

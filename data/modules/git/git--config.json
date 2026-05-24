@@ -1,0 +1,12 @@
+{
+    "module": "Git",
+    "category": "Git",
+    "subcategory": "Config",
+    "questions": [
+        {
+            "type": "theory",
+            "question": "How to add a directory as a safe Directory in Git Config?",
+            "answer": "<font style=\"color:rgb(15, 23, 42)\"><span>git config --global --add safe.directory F:\\xampp\\htdocs\\MyLearningHub</span></font>"
+        }
+    ]
+}

@@ -115,6 +115,17 @@
                     "file": "modules/android/android--adb-commands.json"
                 }
             ]
+        },
+        {
+            "name": "Git",
+            "slug": "git",
+            "items": [
+                {
+                    "category": "Git",
+                    "subcategory": "Config",
+                    "file": "modules/git/git--config.json"
+                }
+            ]
         }
     ]
 }

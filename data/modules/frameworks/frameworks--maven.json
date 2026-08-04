@@ -1,0 +1,22 @@
+{
+    "module": "Frameworks",
+    "category": "Frameworks",
+    "subcategory": "Maven",
+    "questions": [
+        {
+            "type": "theory",
+            "question": "Page Object Model Framework Setup",
+            "answer": "Eclipse<div>File &gt; Create New&nbsp; &gt; Maven &gt; Maven Project &gt;Select project name and location &gt;&nbsp;Select an Archetype (Donot Select - 'Create a Simple skip archetype')&gt;Select an Archetype &gt; org.apache.maven.archetypes &gt; maven-archetype-quickstart &gt; Version 1.5</div><div>&nbsp;Enter a group id for the artifact.</div>"
+        },
+        {
+            "type": "theory",
+            "question": "Pre Requisites",
+            "answer": "After Creating a Maven Project, Check if all the mvn dependencties are getting downloaded or not. Else check&nbsp; m2 Console in New Eclipse IDE for&nbsp;&nbsp;Y: y acceptance, enter Y to install all maven dependencies.&nbsp;"
+        },
+        {
+            "type": "theory",
+            "question": "Packages",
+            "answer": "<div><span>Create base folders and resources</span></div><div><span><br></span></div><div><span>Under src/test/java, create packages:</span></div><div><span style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\">tests</span></div><div><font style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\"><span><b><br></b></span></font></div><div><span>Under src/main/java, create packages:</span></div><div><span style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\">framework.driver</span></div><div><span style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\">framework.config</span></div><div><span style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\">framework.utils</span></div><div><span style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\">framework.pages</span></div><div><font style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\"><span><b><br></b></span></font></div><div><span>Under src/test/resources, create:</span></div><div><span style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\">config/config.properties</span></div><div><span style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\">apps/ (to store .apk / .ipa if needed)</span></div><div><span style=\"color:oklab(0.314057 -0.0203846 -0.0629088)\">testng.xml (suite file)</span></div>"
+        }
+    ]
+}

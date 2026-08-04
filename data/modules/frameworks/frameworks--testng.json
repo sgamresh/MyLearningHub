@@ -1,0 +1,12 @@
+{
+    "module": "Frameworks",
+    "category": "Frameworks",
+    "subcategory": "TestNG",
+    "questions": [
+        {
+            "type": "theory",
+            "question": "TestNG Installation",
+            "answer": "https://testng.org/testng-eclipse-update-site<br>Always trust all content. Accept any pop ups.<br>Restart Eclipse when Required."
+        }
+    ]
+}

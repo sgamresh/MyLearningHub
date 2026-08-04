@@ -1,0 +1,17 @@
+{
+    "module": "Frameworks",
+    "category": "Frameworks",
+    "subcategory": "pom.xml",
+    "questions": [
+        {
+            "type": "theory",
+            "question": "dependencies",
+            "answer": "<div>&lt;!-- Selenium Java --&gt;</div><div>&nbsp; &nbsp; &lt;dependency&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;groupId&gt;org.seleniumhq.selenium&lt;/groupId&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;artifactId&gt;selenium-java&lt;/artifactId&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;version&gt;${selenium.version}&lt;/version&gt;</div><div>&nbsp; &nbsp; &lt;/dependency&gt;<br><br><div>&lt;!-- Appium Java client --&gt;</div><div>&nbsp; &nbsp; &lt;dependency&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;groupId&gt;io.appium&lt;/groupId&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;artifactId&gt;java-client&lt;/artifactId&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;version&gt;${appium.version}&lt;/version&gt;</div><div>&nbsp; &nbsp; &lt;/dependency&gt;<br><br><div>&lt;!-- TestNG --&gt;</div><div>&nbsp; &nbsp; &lt;dependency&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;groupId&gt;org.testng&lt;/groupId&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;artifactId&gt;testng&lt;/artifactId&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;version&gt;${testng.version}&lt;/version&gt;</div><div>&nbsp; &nbsp; &nbsp; &lt;scope&gt;test&lt;/scope&gt;</div><div>&nbsp; &nbsp; &lt;/dependency&gt;</div></div></div>"
+        },
+        {
+            "type": "theory",
+            "question": "properties",
+            "answer": "<div><font style=\"color:rgb(15, 23, 42)\"><span>&lt;properties&gt;</span></font></div><div><font style=\"color:rgb(15, 23, 42)\"><span>&nbsp; &nbsp; &lt;maven.compiler.source&gt;11&lt;/maven.compiler.source&gt;</span></font></div><div><font style=\"color:rgb(15, 23, 42)\"><span>&nbsp; &nbsp; &lt;maven.compiler.target&gt;11&lt;/maven.compiler.target&gt;</span></font></div><div><font style=\"color:rgb(15, 23, 42)\"><span>&nbsp; &nbsp; &lt;selenium.version&gt;4.10.0&lt;/selenium.version&gt;</span></font></div><div><font style=\"color:rgb(15, 23, 42)\"><span>&nbsp; &nbsp; &lt;testng.version&gt;7.7.0&lt;/testng.version&gt;</span></font></div><div><font style=\"color:rgb(15, 23, 42)\"><span>&nbsp; &nbsp; &lt;appium.version&gt;10.0.0&lt;/appium.version&gt;</span></font></div><div><font style=\"color:rgb(15, 23, 42)\"><span>&nbsp; &lt;/properties&gt;</span></font></div>"
+        }
+    ]
+}

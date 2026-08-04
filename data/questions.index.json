@@ -126,6 +126,27 @@
                     "file": "modules/git/git--config.json"
                 }
             ]
+        },
+        {
+            "name": "Frameworks",
+            "slug": "frameworks",
+            "items": [
+                {
+                    "category": "Frameworks",
+                    "subcategory": "Maven",
+                    "file": "modules/frameworks/frameworks--maven.json"
+                },
+                {
+                    "category": "Frameworks",
+                    "subcategory": "pom.xml",
+                    "file": "modules/frameworks/frameworks--pom-xml.json"
+                },
+                {
+                    "category": "Frameworks",
+                    "subcategory": "TestNG",
+                    "file": "modules/frameworks/frameworks--testng.json"
+                }
+            ]
         }
     ]
 }
